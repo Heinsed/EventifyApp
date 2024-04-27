@@ -2,6 +2,7 @@ import {View, Text, TouchableOpacity, Pressable} from 'react-native';
 import {SafeAreaView} from "react-native-safe-area-context";
 import TabItem from "./components/TabItem";
 import styled from "styled-components/native";
+import {UIStyles} from "../../styles/UI";
 
 
 const Tabs = ({ state, descriptors, navigation }) => {
@@ -57,7 +58,8 @@ const Tabs = ({ state, descriptors, navigation }) => {
 const TabsNavigation = styled.SafeAreaView( () => ({
     width: '100%',
     background: 'white',
-
+    borderTopWidth: 1,
+    borderTopColor: UIStyles.colors.lightGrey
 }));
 
 const NavigationWrapper = styled.View( () => ({
