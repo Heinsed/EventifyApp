@@ -1,4 +1,4 @@
-export const stylesVars = {
+export const UIStyles = {
     colors: {
         white: '#fff',
         green: '#95C11F',

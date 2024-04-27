@@ -15,7 +15,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.eventify.eventifyapp",
+      "config": {
+        "googleMapsApiKey": "AIzaSyB_fc8ygl6I2jevUZEs-p4p2-Gy-SGupnw"
+      }
     },
     "android": {
       "adaptiveIcon": {

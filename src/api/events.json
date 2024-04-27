@@ -1,0 +1,112 @@
+[
+  {
+    "Date": "2024-05-10",
+    "Year": 2024,
+    "Time": "18:00",
+    "Location": "Парк Шевченко, Одеса, Україна",
+    "Latitude": 46.4682,
+    "Longitude": 30.7489,
+    "Image": "https://i0.wp.com/cid.center/wp-content/uploads/2020/11/placeholder.png?ssl=1",
+    "Category": "Фестиваль",
+    "Description": "Щорічний фестиваль культури та мистецтва в Парку Шевченка."
+  },
+  {
+    "Date": "2024-06-05",
+    "Year": 2024,
+    "Time": "20:00",
+    "Location": "Дерибасівська вулиця, Одеса, Україна",
+    "Latitude": 46.4846,
+    "Longitude": 30.7326,
+    "Image": "https://i0.wp.com/cid.center/wp-content/uploads/2020/11/placeholder.png?ssl=1",
+    "Category": "Театр",
+    "Description": "Вистава 'Відьма' у одеському театрі на Дерибасівській."
+  },
+  {
+    "Date": "2024-07-20",
+    "Year": 2024,
+    "Time": "15:00",
+    "Location": "Пляж 'Аркадія', Одеса, Україна",
+    "Latitude": 46.4409,
+    "Longitude": 30.7617,
+    "Image": "https://i0.wp.com/cid.center/wp-content/uploads/2020/11/placeholder.png?ssl=1",
+    "Category": "Музика",
+    "Description": "Великий open-air концерт на пляжі 'Аркадія'."
+  },
+  {
+    "Date": "2024-08-12",
+    "Year": 2024,
+    "Time": "12:30",
+    "Location": "Одеський оперний театр, Одеса, Україна",
+    "Latitude": 46.4851,
+    "Longitude": 30.7437,
+    "Image": "https://i0.wp.com/cid.center/wp-content/uploads/2020/11/placeholder.png?ssl=1",
+    "Category": "Опера",
+    "Description": "Вечірня вистава 'Тоска' в Одеському оперному театрі."
+  },
+  {
+    "Date": "2024-09-05",
+    "Year": 2024,
+    "Time": "19:00",
+    "Location": "Парк Шевченко, Одеса, Україна",
+    "Latitude": 46.4682,
+    "Longitude": 30.7489,
+    "Image": "https://i0.wp.com/cid.center/wp-content/uploads/2020/11/placeholder.png?ssl=1",
+    "Category": "Фестиваль",
+    "Description": "Пікнік та концерт у відкритому повітрі в Парку Шевченка."
+  },
+  {
+    "Date": "2024-10-15",
+    "Year": 2024,
+    "Time": "16:00",
+    "Location": "Одеський музей мистецтва, Одеса, Україна",
+    "Latitude": 46.4788,
+    "Longitude": 30.7377,
+    "Image": "https://i0.wp.com/cid.center/wp-content/uploads/2020/11/placeholder.png?ssl=1",
+    "Category": "Мистецтво",
+    "Description": "Відкриття виставки сучасного мистецтва в Одеському музеї мистецтва."
+  },
+  {
+    "Date": "2024-11-20",
+    "Year": 2024,
+    "Time": "17:30",
+    "Location": "Приморський бульвар, Одеса, Україна",
+    "Latitude": 46.4824,
+    "Longitude": 30.7477,
+    "Image": "https://i0.wp.com/cid.center/wp-content/uploads/2020/11/placeholder.png?ssl=1",
+    "Category": "Вуличне Виставлення",
+    "Description": "Мистецькі інсталяції та живописні виставки вздовж Приморського бульвару."
+  },
+  {
+    "Date": "2024-12-08",
+    "Year": 2024,
+    "Time": "14:00",
+    "Location": "Археологічний музей Одеси, Одеса, Україна",
+    "Latitude": 46.4829,
+    "Longitude": 30.7438,
+    "Image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYzuGvSdLLmAgWiCTgUD-6-7GCA_t35cM4o7w3WQXq2w&s",
+    "Category": "Історія",
+    "Description": "Екскурсія до археологічних розкопок у Археологічному музеї Одеси."
+  },
+  {
+    "Date": "2025-01-25",
+    "Year": 2025,
+    "Time": "11:00",
+    "Location": "Пляж 'Ланжерон', Одеса, Україна",
+    "Latitude": 46.4362,
+    "Longitude": 30.7624,
+    "Image": "https://i0.wp.com/cid.center/wp-content/uploads/2020/11/placeholder.png?ssl=1",
+    "Category": "Спорт",
+    "Description": "Турнір з пляжного волейболу на пляжі 'Ланжерон'."
+  },
+  {
+    "Date": "2025-02-18",
+    "Year": 2025,
+    "Time": "13:30",
+    "Location": "Одеський театр маріонеток, Одеса, Україна",
+    "Latitude": 46.4823,
+    "Longitude": 30.7471,
+    "Image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYzuGvSdLLmAgWiCTgUD-6-7GCA_t35cM4o7w3WQXq2w&s",
+    "Category": "Театр",
+    "Description": "Вистава 'Казка про Ганса' в Одеському театрі маріонеток."
+  }
+]
