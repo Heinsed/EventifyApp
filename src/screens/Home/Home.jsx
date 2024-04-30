@@ -20,36 +20,6 @@ const Home = () => {
     const mapRef = React.useRef();
     const [events, setEvents] = useState([]);
 
-    useEffect(() => {
-        (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                let location = null;
-                return;
-            }
-
-            let location = await Location.getCurrentPositionAsync({});
-            setLocation(location.coords);
-        })();
-    }, []);
-
-
-
-    useEffect(() => {
-        if (location) {
-            let region = {
-                latitude:  location.latitude,
-                longitude: location.longitude,
-                latitudeDelta: 0.2,
-                longitudeDelta: 0.2,
-            };
-
-            mapRef.current.animateToRegion(region, 2000);
-        }
-    }, [location]);
-
-
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,6 +33,34 @@ const Home = () => {
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        (async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                let location = null;
+                return;
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            setLocation(location.coords);
+            let region = {
+                latitude:  location.latitude,
+                longitude: location.longitude,
+                latitudeDelta: 0.2,
+                longitudeDelta: 0.2,
+            };
+
+            mapRef.current.animateToRegion(region, 2000);
+        })();
+    }, []);
+
+
+
+
+
+
+
 
     const handleMarkerPress = (event) => {
         if (mapRef.current) {
