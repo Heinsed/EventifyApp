@@ -74,9 +74,8 @@ const Events = () => {
         <EventsScreen >
             <StatusBar barStyle={Platform.OS === 'ios' ? "dark-content" : 'dark-content'} backgroundColor={'white'}/>
             <SafeAreaView >
-                <SearchInput onSearchChange={handleSearchChange} onFilterChange={handleCategoryChange} />
-                <FilterEvents onFilterChange={handleCategoryChange}/>
-
+                    <SearchInput onSearchChange={handleSearchChange} onFilterChange={handleCategoryChange} title={'Івенти'} />
+                    <FilterEvents onFilterChange={handleCategoryChange}/>
                     <EventsList
                         data={filteredEvents}
                         renderItem={({item}) => <EventCard itemID={item.id} title={item.Title} image={item.Image} date={item.Date} year={item.Year} time={item.Time} location={item.Location} />}
@@ -86,6 +85,7 @@ const Events = () => {
 
                     />
 
+                    {/*TODO: Fix bottom padding when scrolling*/}
 
                 <EventsStackNavigator />
 
@@ -99,8 +99,6 @@ const EventsScreen = styled.View( () => ({
     background: UIStyles.colors.white,
     flex: 1,
     gap: 0,
-
-
 }));
 
 const EventsList = styled.FlatList( () => ({
@@ -109,8 +107,6 @@ const EventsList = styled.FlatList( () => ({
     marginTop: 20,
     paddingLeft: 24,
     paddingRight: 24,
-
-
 }));
 
 

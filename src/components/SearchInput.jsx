@@ -5,10 +5,11 @@ import Icon from "./Icon";
 import {Keyboard} from "react-native";
 import CustomPressable from "./CustomPressable";
 import {useEffect} from "react";
+import Wishlist from "./Wishlist/Wishlist";
 
 
 
-const SearchInput = ({onSearchChange, onFilterSubmitted}) => {
+const SearchInput = ({onSearchChange, onFilterSubmitted, title}) => {
     const [isInputVisible, setInputVisible] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const submitSearch = () => {
@@ -27,13 +28,15 @@ const SearchInput = ({onSearchChange, onFilterSubmitted}) => {
 
     return(
         <SearchInputContainer>
-            <SearchTextInput placeholder={"Пошук"} visible={isInputVisible} value={searchValue} onChangeText={setSearchValue}/>
-            <IconWrapper inputVisible={isInputVisible} targetFunction={() => { (isInputVisible && searchValue !== '') ? submitSearch() : toggleSearch()}}>
-                <Icon iconType={'search'} color={ (isInputVisible || searchValue !== '') ? UIStyles.colors.white : UIStyles.colors.green } size={24} />
+
+            <IconWrapper  targetFunction={() => { (isInputVisible && searchValue !== '') ? submitSearch() : toggleSearch()}}>
+                <Icon iconType={'search'} color={ UIStyles.colors.white } size={24} />
             </IconWrapper>
-            <IconWrapper inputVisible={isInputVisible} targetFunction={() => { (isInputVisible && searchValue !== '') ? submitSearch() : toggleSearch()}}>
-                <Icon iconType={'search'} color={ (isInputVisible || searchValue !== '') ? UIStyles.colors.white : UIStyles.colors.green } size={24} />
-            </IconWrapper>
+            <SearchTitle>{title}</SearchTitle>
+            <Wishlist />
+            <SearchTextContainer inputVisible={isInputVisible}>
+                <SearchTextInput placeholder={"Пошук"} visible={isInputVisible} value={searchValue} onChangeText={setSearchValue}/>
+            </SearchTextContainer>
 
         </SearchInputContainer>
     )
@@ -43,15 +46,31 @@ const SearchInputContainer = styled.View( () => ({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    height: 42,
+
     paddingLeft: 24,
     paddingRight: 24,
     gap: 12,
     justifyContent: 'space-between',
+    flexWrap: 'wrap'
+}));
+
+const SearchTextContainer = styled.View( ({inputVisible}) => ({
+    width: '100%',
+    height: inputVisible ? 42 : 0,
+}));
+
+const SearchTitle = styled.Text( () => ({
+    flex: 1,
+    fontSize: 18,
+    fontFamily: 'MontserratSemiBold',
+    color: UIStyles.colors.black,
+    textAlign: 'center',
+
 }));
 
 const SearchTextInput = styled.TextInput( ({visible}) => ({
     flex: 1,
+    width: '100%',
     display: visible ? null : 'none',
     background: UIStyles.colors.darkWhite,
     paddingLeft: 15,
@@ -59,18 +78,19 @@ const SearchTextInput = styled.TextInput( ({visible}) => ({
     paddingTop: 12,
     paddingBottom: 12,
     borderRadius: 12,
-
+    alignSelf: 'center',
     fontSize: 15,
+    marginRight: 0,
     fontFamily: 'MontserratRegular',
 }));
 
-const IconWrapper = styled(CustomPressable)( ({inputVisible}) => ({
-    background: inputVisible ? UIStyles.colors.green : null,
+const IconWrapper = styled(CustomPressable)( ({}) => ({
+    background: UIStyles.colors.green,
     justifyContent: 'center',
     alignItems: 'center',
     height:42,
     borderRadius: 42,
-    width: inputVisible ? 42 : 24,
+    width: 42,
     fontSize: 15,
 }));
 
