@@ -42,7 +42,6 @@ const Events = () => {
 
     const handleCategoryChange = (categories) => {
         setSelectedCategories(categories);
-        setSelectedSearch('');
     };
 
     const handleSearchChange = (search) => {
