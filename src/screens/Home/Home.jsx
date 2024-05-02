@@ -9,15 +9,15 @@ import * as Location from 'expo-location';
 import {UIStyles} from "../../styles/UI";
 
 const initialRegion = {
-    latitude: 0,
-    longitude: 0,
+    latitude: 1,
+    longitude: 1,
     latitudeDelta: 0.2,
     longitudeDelta: 0.2,
 };
 
 const Home = () => {
-    const [location, setLocation] = useState(null);
     const mapRef = React.useRef();
+    const [location, setLocation] = useState(null);
     const [events, setEvents] = useState([]);
 
 
@@ -26,13 +26,17 @@ const Home = () => {
             try {
                 const data = await fetchEventData();
                 setEvents(data);
+
             } catch (error) {
                 console.error(error.message);
             }
         };
-
         fetchData();
-    }, []);
+    })
+
+
+
+
 
     useEffect(() => {
         (async () => {
@@ -42,22 +46,24 @@ const Home = () => {
                 return;
             }
 
+
+
             let location = await Location.getCurrentPositionAsync({});
             setLocation(location.coords);
+
             let region = {
-                latitude:  location.latitude,
-                longitude: location.longitude,
-                latitudeDelta: 0.2,
-                longitudeDelta: 0.2,
+                latitude:  location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.05,
+                longitudeDelta: 0.05,
             };
 
+
+
             mapRef.current.animateToRegion(region, 2000);
+
         })();
     }, []);
-
-
-
-
 
 
 
@@ -76,8 +82,6 @@ const Home = () => {
 
 
 
-
-
     return (
         <>
             <StatusBar barStyle={Platform.OS === 'ios' ? "dark-content" : 'light-content'}/>
@@ -88,29 +92,28 @@ const Home = () => {
                 showsUserLocation={true}
                 initialRegion={initialRegion}
                 clusterColor={UIStyles.colors.green}
-
-
             >
-                {events.map((event, index) => (
-                    <Marker
-                        key={index}
-                        coordinate={{
-                            latitude: event.Latitude,
-                            longitude: event.Longitude,
-                        }}
-                        onPress={() => handleMarkerPress(event)}
-                    >
-                        <MarkerCircle>
-                            <MarkerImage
-                                source={{
-                                uri: event.Image,
-                                }}
-                            />
-                        </MarkerCircle>
-                        <MarkerDot />
-                    </Marker>
-                ))}
-
+                {events.length > 0 &&
+                    events.map((event, index) => (
+                        <Marker
+                            key={index}
+                            coordinate={{
+                                latitude: event.Latitude,
+                                longitude: event.Longitude,
+                            }}
+                            onPress={() => handleMarkerPress(event)}
+                        >
+                            <MarkerCircle>
+                                <MarkerImage
+                                    source={{
+                                        uri: event.Image,
+                                    }}
+                                />
+                            </MarkerCircle>
+                            <MarkerDot />
+                        </Marker>
+                    ))
+                }
             </MapView>
         </>
 
@@ -119,13 +122,9 @@ const Home = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     map: {
         flex: 1,
     },
-
 });
 
 

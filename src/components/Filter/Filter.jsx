@@ -1,20 +1,70 @@
 import {Modal, Text, View, Pressable, ScrollView, CheckBox} from "react-native";
-import {useState} from "react";
+import {useState, useEffect, useRef} from "react";
 import styled from "styled-components/native";
 import {SafeAreaView} from "react-native-safe-area-context";
-import Container from "./Container";
-import Icon from "./Icon";
-import {UIStyles} from "../styles/UI";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
+import Container from "../Container";
+import Icon from "../Icon";
+import {UIStyles} from "../../styles/UI";
+import {fetchEventData} from "../../api/getEvents";
+import CustomPressable from "../CustomPressable";
+import CategoryCheckbox from "./components/CategoryCheckbox";
 
-const FilterEvents = () =>{
+
+const FilterEvents = ({onFilterChange}) =>{
     const [modalVisible, setModalVisible] = useState(false);
-    const [isSelected, setSelection] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [categoriesCheckboxes, setCategoriesCheckboxes] = useState(categories.map(() => false));
+    const [selectedCategories, setSelectedCategories] = useState([]);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchEventData();
+                const uniqueCategories = [...new Set(data.map(event => event.Category))];
+                setCategories(uniqueCategories);
+            } catch (error) {
+                console.error(error.message);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+
+    const handleCategoryChange = (category, isChecked) => {
+        if (isChecked) {
+            setSelectedCategories([...selectedCategories, category]);
+        } else {
+            setSelectedCategories(selectedCategories.filter(cat => cat !== category));
+        }
+
+    };
+
+    const resetCategoriesCheckboxes = () => {
+        setSelectedCategories([]);
+        setCategoriesCheckboxes(categories.map(() => false));
+
+    };
+
+
+    const submitFilter = () => {
+        onFilterChange(selectedCategories);
+        setModalVisible(!modalVisible);
+    }
+
+
+    const clearFilter = () => {
+        resetCategoriesCheckboxes();
+    }
+
     return(
 
         <FilterContainer>
-            <FilterButton onPress={() => setModalVisible(true)}>
-                <Text>123</Text>
+
+            <FilterButton targetFunction={() => setModalVisible(true)}>
+                <Icon iconType={"filter"} size={28} color={UIStyles.colors.white}/>
+                <FilterButtonTitle>Фільтр ({selectedCategories !== '' ? selectedCategories.length : null})</FilterButtonTitle>
             </FilterButton>
 
             <FilterModal
@@ -26,11 +76,11 @@ const FilterEvents = () =>{
             >
                 <FilterModalContainer>
                     <HeaderContainer>
-                        <FilterCloseButton onPress={() => setModalVisible(false)}>
+                        <FilterCloseButton targetFunction={() => setModalVisible(false)}>
                             <Icon iconType={"close"} size={28} color={UIStyles.colors.green}/>
                         </FilterCloseButton>
-                        <FilterHeaderTitle>Фільтр</FilterHeaderTitle>
-                        <FilterClearButton onPress={() => console.log('filter is cleared')}>
+                        <FilterHeaderTitle>Фільтр ({selectedCategories !== '' ? selectedCategories.length : null})</FilterHeaderTitle>
+                        <FilterClearButton targetFunction={() => clearFilter()}>
                             <FilterClearButtonTitle>Очистити</FilterClearButtonTitle>
                         </FilterClearButton>
                     </HeaderContainer>
@@ -41,29 +91,27 @@ const FilterEvents = () =>{
                                     <FilterSectionTitle>Категорія</FilterSectionTitle>
                                 </FilterSectionHeader>
                                 <FilterSectionContainer>
-                                    <FilterCheckbox>
-                                        <BouncyCheckbox
-                                            onPress={(isChecked: false) => {}}
-                                            size={24}
-                                            fillColor={UIStyles.colors.green}
-                                            innerIconStyle={{ borderRadius: 5, borderWidth: 1, borderColor: UIStyles.colors.green }}
-                                            iconStyle={{ borderRadius: 5 }}
+                                    {categories.map((category, index) => (
+                                        <CategoryCheckbox
+                                            category={category}
+                                            key={index}
+                                            isChecked={categoriesCheckboxes[index] && selectedCategories.includes(category)}
+                                            onChange={(isChecked) => {
+                                                const newCategoriesCheckboxes = [...categoriesCheckboxes];
+                                                newCategoriesCheckboxes[index] = isChecked;
+                                                setCategoriesCheckboxes(newCategoriesCheckboxes);
+                                                handleCategoryChange(category, isChecked);
+                                            }}
                                         />
-                                        <CheckboxTitle>Концерт</CheckboxTitle>
-                                    </FilterCheckbox>
-
-
+                                    ))}
                                 </FilterSectionContainer>
                             </FilterSection>
-
                         </FilterSections>
-
                     </Container>
-
                 </FilterModalContainer>
                 <FilterSubmitWrapper>
                     <FilterSubmitArea>
-                        <SubmitButton onPress={() => {console.warn('submited filter')}}>
+                        <SubmitButton targetFunction={() => {submitFilter()}}>
                             <SubmitButtonTitle>
                                 Застосувати
                             </SubmitButtonTitle>
@@ -78,11 +126,27 @@ const FilterEvents = () =>{
 }
 
 const FilterContainer = styled.View( () => ({
-    width: '100%',
-
+    minWidth: '100%',
+    marginTop: 10,
+    paddingBottom: 0,
+    paddingLeft: 24,
+    paddingRight: 24,
 }));
 
-const FilterButton = styled.Pressable( () => ({
+const FilterButton = styled(CustomPressable)(() => ({
+    backgroundColor: UIStyles.colors.green,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+    borderRadius: 8,
+    gap: 8,
+    justifyContent: 'center',
+}));
+
+const FilterButtonTitle = styled.Text( () => ({
+    fontSize: 16,
+    fontFamily: 'MontserratMedium',
+    color: UIStyles.colors.white
 }));
 
 const FilterModal = styled.Modal( () => ({
@@ -107,7 +171,7 @@ const HeaderContainer = styled.View( () => ({
 
 }));
 
-const FilterCloseButton = styled.Pressable( () => ({
+const FilterCloseButton = styled(CustomPressable)( () => ({
     flex: 1,
 }));
 
@@ -120,7 +184,7 @@ const FilterHeaderTitle = styled.Text( () => ({
     flex: 1
 }));
 
-const FilterClearButton = styled.Pressable( () => ({
+const FilterClearButton = styled(CustomPressable)( () => ({
     flex: 1,
 
 }));
@@ -162,20 +226,6 @@ const FilterSectionContainer = styled.View( () => ({
 
 
 
-const FilterCheckbox = styled.View( () => ({
-    flexDirection: 'row',
-    alignItems: 'center',
-
-}));
-
-const CheckboxTitle = styled.Text( () => ({
-    fontSize: 16,
-    color: UIStyles.colors.black,
-    fontFamily: 'MontserratMedium',
-
-}));
-
-
 const FilterSubmitWrapper = styled.View( () => ({
     margin: 'auto 0',
     marginBottom: 0,
@@ -197,7 +247,7 @@ const FilterSubmitArea = styled.SafeAreaView( () => ({
 
 }));
 
-const SubmitButton = styled.Pressable( () => ({
+const SubmitButton = styled(CustomPressable)( () => ({
     background: UIStyles.colors.green,
     paddingTop: 21,
     paddingBottom: 21,

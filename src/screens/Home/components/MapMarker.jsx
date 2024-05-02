@@ -27,6 +27,7 @@ const MarkerCircle = styled.View({
     overflow: true,
     borderWidth: 5,
     borderColor: UIStyles.colors.green,
+   
 });
 
 
@@ -34,6 +35,7 @@ const MarkerImage = styled.Image({
     width: 40,
     height: 40,
     borderRadius: 50,
+
 });
 
 const MarkerDot = styled.Image({

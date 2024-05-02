@@ -3,6 +3,7 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import TabItem from "./components/TabItem";
 import styled from "styled-components/native";
 import {UIStyles} from "../../styles/UI";
+import CustomPressable from "../../components/CustomPressable";
 
 
 const Tabs = ({ state, descriptors, navigation }) => {
@@ -33,21 +34,15 @@ const Tabs = ({ state, descriptors, navigation }) => {
                     }
                 };
 
-                const onLongPress = () => {
-                    navigation.emit({
-                        type: 'tabLongPress',
-                        target: route.key,
-                    });
-                };
+
 
                 return (
-                    <Pressable
-                        onPress={onPress}
-                        onLongPress={onLongPress}
+                    <CustomPressable
+                        targetFunction={onPress}
                         key={route.key}
                     >
                         <TabItem title={label} isFocused={isFocused} iconType={icon} />
-                    </Pressable>
+                    </CustomPressable>
                 );
             })}
             </NavigationWrapper>
@@ -59,12 +54,13 @@ const TabsNavigation = styled.SafeAreaView( () => ({
     width: '100%',
     background: 'white',
     borderTopWidth: 1,
-    borderTopColor: UIStyles.colors.lightGrey
+    borderTopColor: UIStyles.colors.lightGrey,
+    margin: 0
 }));
 
 const NavigationWrapper = styled.View( () => ({
-    marginTop: 15,
-    marginBottom: 10,
+    paddingTop: 15,
+    paddingBottom: 10,
     width: '100%',
     background: 'white',
     paddingLeft: 20,

@@ -11,9 +11,8 @@ const Container = ({children}) => {
 }
 const ContainerBox = styled.View( () => ({
     paddingTop: 15,
-    paddingLeft: 24,
-    paddingRight: 24,
-
-
+    marginLeft: 24,
+    marginRight: 24,
+    flex: 1,
 }));
 export default Container;
