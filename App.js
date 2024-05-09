@@ -1,9 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import {useEffect, useState} from "react";
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import TabNavigator from "./src/navigation/TabNavigator";
-
+import Auth from './src/screens/Auth/Auth';
+import auth from "@react-native-firebase/auth";
 
 
 
@@ -16,12 +18,53 @@ export default function App() {
   });
 
 
+  const [loggedStatus, setLoggedStatus] = useState(false);
+  const [user, setUser] = useState(null);
 
-  return (
-    <SafeAreaProvider>
-      <TabNavigator />
-    </SafeAreaProvider>
-  );
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
+
+  function onAuthStateChanged(user) {
+    if (user) {
+      setUser(user);
+      setLoggedStatus(true);
+      console.log("User is signed in: ", user);
+    } else {
+      setUser(null);
+      setLoggedStatus(false);
+      console.log("User is signed out");
+    }
+  }
+
+
+  const signOut = async () => {
+    try {
+      await auth().signOut();
+      setUser(null);
+      setLoggedStatus(false);
+      console.log('User signed out successfully!');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+
+
+  return(
+      <SafeAreaProvider>
+        {loggedStatus ?
+            <>
+            <TabNavigator />
+            {/*<Button title="Sign Out" onPress={signOut} />*/}
+            </>
+        :
+            <Auth />
+        }
+      </SafeAreaProvider>
+  )
+
 }
 
 

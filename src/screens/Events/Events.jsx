@@ -11,13 +11,13 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EventsStackNavigator from "../../navigation/EventsStackNavigator";
 import SearchInput from "../../components/SearchInput";
-import Container from '../../components/Container';
 import styled from "styled-components/native";
 import {UIStyles} from "../../styles/UI";
 import FilterEvents from "../../components/Filter/Filter";
 import EventCard from "./components/EventCard";
-import {fetchEventData} from "../../api/getEvents";
 import {useState, useEffect} from "react";
+import {fetchEvents} from "../../utils/getEvents";
+import moment from "moment";
 
 
 const Events = () => {
@@ -28,7 +28,8 @@ const Events = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetchEventData();
+                const data = await fetchEvents();
+
                 setEvents(data);
             } catch (error) {
                 console.error(error.message);
@@ -41,6 +42,7 @@ const Events = () => {
 
 
     const handleCategoryChange = (categories) => {
+        console.log(categories);
         setSelectedCategories(categories);
     };
 
@@ -52,16 +54,16 @@ const Events = () => {
     switch(true) {
         case selectedCategories.length > 0 && selectedSearch !== '':
             filteredEvents = events.filter(event => {
-                const titleMatch = event.Title.toLowerCase().includes(selectedSearch.toLowerCase());
-                const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(event.Category);
+                const titleMatch = event.title.toLowerCase().includes(selectedSearch.toLowerCase());
+                const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(event.category);
                 return titleMatch && categoryMatch;
             });
             break;
         case selectedCategories.length > 0:
-            filteredEvents = events.filter(event => selectedCategories.includes(event.Category));
+            filteredEvents = events.filter(event => selectedCategories.includes(event.category));
             break;
         case selectedSearch !== '':
-            filteredEvents = events.filter(event => event.Title.toLowerCase().includes(selectedSearch.toLowerCase()));
+            filteredEvents = events.filter(event => event.title.toLowerCase().includes(selectedSearch.toLowerCase()));
             break;
         default:
             filteredEvents = events;
@@ -77,7 +79,7 @@ const Events = () => {
                     <FilterEvents onFilterChange={handleCategoryChange}/>
                     <EventsList
                         data={filteredEvents}
-                        renderItem={({item}) => <EventCard itemID={item.id} title={item.Title} image={item.Image} date={item.Date} year={item.Year} time={item.Time} location={item.Location} />}
+                        renderItem={({item}) => <EventCard itemID={item.id} title={item.title} image={item.image} date={moment.unix(item.date.seconds).format('DD') + ' ' + moment.unix(item.date.seconds).format('MMMM')} year={moment.unix(item.date.seconds).format('YYYY')} time={moment.unix(item.date.seconds).format('HH:mm')} location={item.location} />}
                         keyExtractor={item => item.id}
                         keyboardShouldPersistTaps='handled'
                         keyboardDismissMode="on-drag"

@@ -8,6 +8,8 @@ import {UIStyles} from "../../styles/UI";
 import {fetchEventData} from "../../api/getEvents";
 import CustomPressable from "../CustomPressable";
 import CategoryCheckbox from "./components/CategoryCheckbox";
+import {getCategories} from "../../utils/getCategories";
+
 
 
 const FilterEvents = ({onFilterChange}) =>{
@@ -16,29 +18,29 @@ const FilterEvents = ({onFilterChange}) =>{
     const [categoriesCheckboxes, setCategoriesCheckboxes] = useState(categories.map(() => false));
     const [selectedCategories, setSelectedCategories] = useState([]);
 
-
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchCategories = async () => {
             try {
-                const data = await fetchEventData();
-                const uniqueCategories = [...new Set(data.map(event => event.Category))];
-                setCategories(uniqueCategories);
+                const data = await getCategories();
+
+                setCategories(data);
             } catch (error) {
                 console.error(error.message);
             }
         };
 
-        fetchData();
+        fetchCategories();
     }, []);
+
+
 
 
     const handleCategoryChange = (category, isChecked) => {
         if (isChecked) {
-            setSelectedCategories([...selectedCategories, category]);
+            setSelectedCategories([...selectedCategories, category.id]);
         } else {
-            setSelectedCategories(selectedCategories.filter(cat => cat !== category));
+            setSelectedCategories(selectedCategories.filter(cat => cat !== category.id));
         }
-
     };
 
     const resetCategoriesCheckboxes = () => {
@@ -93,9 +95,10 @@ const FilterEvents = ({onFilterChange}) =>{
                                 <FilterSectionContainer>
                                     {categories.map((category, index) => (
                                         <CategoryCheckbox
-                                            category={category}
+                                            category={category.id}
+                                            categoryTitle={category.title}
                                             key={index}
-                                            isChecked={categoriesCheckboxes[index] && selectedCategories.includes(category)}
+                                            isChecked={categoriesCheckboxes[index] && selectedCategories.includes(category.id)}
                                             onChange={(isChecked) => {
                                                 const newCategoriesCheckboxes = [...categoriesCheckboxes];
                                                 newCategoriesCheckboxes[index] = isChecked;

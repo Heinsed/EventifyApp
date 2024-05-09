@@ -1,12 +1,12 @@
 import { ScrollView, StyleSheet, Text, View, Image, StatusBar, Platform} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, {useEffect, useState} from "react";
-import {fetchEventData} from "../../api/getEvents";
 import styled from 'styled-components/native';
 import MapView from 'react-native-map-clustering';
 import { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import {UIStyles} from "../../styles/UI";
+import {fetchEvents} from "../../utils/getEvents";
 
 const initialRegion = {
     latitude: 1,
@@ -24,15 +24,17 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetchEventData();
-                setEvents(data);
+                const data = await fetchEvents();
 
+                setEvents(data);
             } catch (error) {
                 console.error(error.message);
             }
         };
+
         fetchData();
-    })
+    }, []);
+
 
 
 
@@ -71,8 +73,8 @@ const Home = () => {
     const handleMarkerPress = (event) => {
         if (mapRef.current) {
             mapRef.current.animateToRegion({
-                latitude: event.Latitude,
-                longitude: event.Longitude,
+                latitude: event.geo.latitude,
+                longitude: event.geo.longitude,
                 latitudeDelta: 0.0002,
                 longitudeDelta: 0.0002,
             });
@@ -98,15 +100,15 @@ const Home = () => {
                         <Marker
                             key={index}
                             coordinate={{
-                                latitude: event.Latitude,
-                                longitude: event.Longitude,
+                                latitude: event.geo.latitude,
+                                longitude: event.geo.longitude,
                             }}
                             onPress={() => handleMarkerPress(event)}
                         >
                             <MarkerCircle>
                                 <MarkerImage
                                     source={{
-                                        uri: event.Image,
+                                        uri: event.image,
                                     }}
                                 />
                             </MarkerCircle>

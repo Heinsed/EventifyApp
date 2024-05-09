@@ -17,19 +17,43 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.eventify.eventifyapp",
-      "config": {
-        "googleMapsApiKey": "AIzaSyB_fc8ygl6I2jevUZEs-p4p2-Gy-SGupnw"
-      }
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "associatedDomains": [
+        "applinks:hilleleventify.firebaseapp.com"
+      ]
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "softwareKeyboardLayoutMode":"pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "googleServicesFile": "google-services.json",
+      "package": "com.eventify.eventifyapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6262dda7-0510-4a6e-8a27-d0e9195ecb7d"
+      }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/6262dda7-0510-4a6e-8a27-d0e9195ecb7d"
     }
   }
 }

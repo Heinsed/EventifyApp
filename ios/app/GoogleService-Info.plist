@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>268165761671-maggjbsr9dbtg8n39t4cp200bap31qa9.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.268165761671-maggjbsr9dbtg8n39t4cp200bap31qa9</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBEmaa9ZY0zXOYgwOksJF8XoxnJTgAy_mc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>268165761671</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>hilleleventify.com</string>
+	<key>PROJECT_ID</key>
+	<string>hilleleventify</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hilleleventify.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:268165761671:ios:503fd2f81e421549bec622</string>
+	<key>DATABASE_URL</key>
+	<string>https://hilleleventify-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

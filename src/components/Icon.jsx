@@ -7,6 +7,7 @@ import FilterIcon from '@iconscout/react-native-unicons/icons/uil-filter';
 import TimeIcon from '@iconscout/react-native-unicons/icons/uil-clock-eight';
 import LocationIcon from '@iconscout/react-native-unicons/icons/uil-map-marker';
 import WishlistIcon from '@iconscout/react-native-unicons/icons/uil-heart';
+import ArrowLeft from '@iconscout/react-native-unicons/icons/uil-arrow-left';
 
 const Icon = ({iconType, color, size}) =>{
     return(
@@ -30,6 +31,8 @@ const Icon = ({iconType, color, size}) =>{
                                                 <LocationIcon color={color} size={size} />
                                                 : iconType === 'wishlist' ?
                                                     <WishlistIcon color={color} size={size} />
+                                                    : iconType === 'arrow-left' ?
+                                                        <ArrowLeft color={color} size={size} />
                     :
 
                     null
