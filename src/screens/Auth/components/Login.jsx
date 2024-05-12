@@ -51,7 +51,7 @@ const Login = ({ navigation }) => {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <LoginScreen>
-            <SafeAreaView>
+
             <LoginForm>
                 {confirmation ? (
                     <>
@@ -120,7 +120,7 @@ const Login = ({ navigation }) => {
                 )}
 
             </LoginForm>
-            </SafeAreaView>
+
         </LoginScreen>
         </TouchableWithoutFeedback>
 
@@ -128,7 +128,7 @@ const Login = ({ navigation }) => {
 };
 
 
-const LoginScreen = styled.View({
+const LoginScreen = styled(SafeAreaView)({
     flex: 1,
 });
 

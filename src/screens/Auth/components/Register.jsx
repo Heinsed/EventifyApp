@@ -75,7 +75,7 @@ const Registration = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 
         <LoginScreen>
-            <SafeAreaView>
+
                 <RegisterScreenHeader>
                     <BackButton
                         targetFunction={() => navigation.popToTop()}>
@@ -161,7 +161,7 @@ const Registration = ({navigation}) => {
 
 
 
-            </SafeAreaView>
+
         </LoginScreen>
 
         </TouchableWithoutFeedback>
@@ -181,7 +181,7 @@ const BackButton = styled(CustomPressable)({
 });
 
 
-const LoginScreen = styled.View({
+const LoginScreen = styled(SafeAreaView)({
     flex: 1,
 });
 

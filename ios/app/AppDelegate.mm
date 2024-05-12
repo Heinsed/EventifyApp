@@ -1,8 +1,10 @@
 #import "AppDelegate.h"
 #import <Firebase/Firebase.h>
-#import <GoogleMaps/GoogleMaps.h>
+
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
+
+#import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate
 

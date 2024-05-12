@@ -6,17 +6,18 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import TabNavigator from "./src/navigation/TabNavigator";
 import Auth from './src/screens/Auth/Auth';
 import auth from "@react-native-firebase/auth";
+import PreAuth from "./src/screens/PreAuth/PreAuth";
 
 
 
 export default function App() {
+  const [showAuth, setShowAuth] = useState(false);
   const [fontLoaded] = useFonts({
     MontserratRegular: require('./assets/fonts/Montserrat-Regular.ttf'),
     MontserratBold: require('./assets/fonts/Montserrat-Bold.ttf'),
     MontserratMedium: require('./assets/fonts/Montserrat-Medium.ttf'),
     MontserratSemiBold: require('./assets/fonts/Montserrat-SemiBold.ttf'),
   });
-
 
   const [loggedStatus, setLoggedStatus] = useState(false);
   const [user, setUser] = useState(null);
@@ -38,7 +39,6 @@ export default function App() {
     }
   }
 
-
   const signOut = async () => {
     try {
       await auth().signOut();
@@ -50,21 +50,26 @@ export default function App() {
     }
   };
 
+  if (!fontLoaded) {
+    return null;
+  }
 
-
-  return(
+  return (
       <SafeAreaProvider>
-        {loggedStatus ?
+        {loggedStatus ? (
             <>
-            <TabNavigator />
-            {/*<Button title="Sign Out" onPress={signOut} />*/}
+              <TabNavigator/>
+              {/*<Button title="Sign Out" onPress={signOut}/>*/}
             </>
-        :
-            <Auth />
-        }
+        ) : (
+            <>
+              {!showAuth ? (
+                  <PreAuth onButtonPress={() => setShowAuth(true)}/>
+              ) : (
+                  <Auth/>
+              )}
+            </>
+        )}
       </SafeAreaProvider>
-  )
-
+  );
 }
-
-

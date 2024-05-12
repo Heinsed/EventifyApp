@@ -19,6 +19,9 @@ const Profile = () => {
         fetchUser();
     }, []);
 
+
+
+
     return (
         <>
           <Text>Profile, {user.name}</Text>

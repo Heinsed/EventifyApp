@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View, Image, StatusBar, Platform} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useLayoutEffect, useState} from "react";
 import styled from 'styled-components/native';
 import MapView from 'react-native-map-clustering';
 import { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -27,6 +27,7 @@ const Home = () => {
                 const data = await fetchEvents();
 
                 setEvents(data);
+
             } catch (error) {
                 console.error(error.message);
             }
@@ -40,7 +41,7 @@ const Home = () => {
 
 
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
@@ -96,9 +97,9 @@ const Home = () => {
                 clusterColor={UIStyles.colors.green}
             >
                 {events.length > 0 &&
-                    events.map((event, index) => (
+                    events.map((event, id) => (
                         <Marker
-                            key={index}
+                            key={id}
                             coordinate={{
                                 latitude: event.geo.latitude,
                                 longitude: event.geo.longitude,

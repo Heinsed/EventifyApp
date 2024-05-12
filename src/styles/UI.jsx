@@ -6,6 +6,7 @@ export const UIStyles = {
         grey: '#F2F2F2',
         dark: '#a1a1a1',
         lightGrey: '#d6d6d6',
-        darkWhite: '#eeeeee'
+        darkWhite: '#eeeeee',
+        darkGreen: '#8CB51D',
     }
 }

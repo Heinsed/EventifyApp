@@ -74,12 +74,12 @@ const Events = () => {
 
         <EventsScreen >
             <StatusBar barStyle={Platform.OS === 'ios' ? "dark-content" : 'dark-content'} backgroundColor={'white'}/>
-            <SafeAreaView >
+
                     <SearchInput onSearchChange={handleSearchChange} onFilterChange={handleCategoryChange} title={'Івенти'} />
                     <FilterEvents onFilterChange={handleCategoryChange}/>
                     <EventsList
                         data={filteredEvents}
-                        renderItem={({item}) => <EventCard itemID={item.id} title={item.title} image={item.image} date={moment.unix(item.date.seconds).format('DD') + ' ' + moment.unix(item.date.seconds).format('MMMM')} year={moment.unix(item.date.seconds).format('YYYY')} time={moment.unix(item.date.seconds).format('HH:mm')} location={item.location} />}
+                        renderItem={({item}) => <EventCard itemID={item.id} title={item.title} image={item.image} date={item.date} location={item.location} />}
                         keyExtractor={item => item.id}
                         keyboardShouldPersistTaps='handled'
                         keyboardDismissMode="on-drag"
@@ -88,18 +88,18 @@ const Events = () => {
 
                     {/*TODO: Fix bottom padding when scrolling*/}
 
-                <EventsStackNavigator />
+                {/*<EventsStackNavigator />*/}
 
-            </SafeAreaView>
+
         </EventsScreen>
 
     )
 }
 
-const EventsScreen = styled.View( () => ({
+const EventsScreen = styled(SafeAreaView)( () => ({
     background: UIStyles.colors.white,
     flex: 1,
-    gap: 0,
+
 }));
 
 const EventsList = styled.FlatList( () => ({

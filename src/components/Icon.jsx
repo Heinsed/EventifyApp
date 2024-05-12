@@ -10,35 +10,30 @@ import WishlistIcon from '@iconscout/react-native-unicons/icons/uil-heart';
 import ArrowLeft from '@iconscout/react-native-unicons/icons/uil-arrow-left';
 
 const Icon = ({iconType, color, size}) =>{
-    return(
-        <>
-            {
-                iconType === 'map' ?
-                    <MapIcon color={color} size={size} />
-                    : iconType === 'user' ?
-                        <UserIcon color={color} size={size} />
-                        : iconType === 'calendar' ?
-                            <CalendarIcon color={color} size={size} />
-                            : iconType === 'search' ?
-                                <SearchIcon color={color} size={size} />
-                                : iconType === 'close' ?
-                                    <CloseIcon color={color} size={size} />
-                                    : iconType === 'filter' ?
-                                        <FilterIcon color={color} size={size} />
-                                        : iconType === 'time' ?
-                                            <TimeIcon color={color} size={size} />
-                                            : iconType === 'location' ?
-                                                <LocationIcon color={color} size={size} />
-                                                : iconType === 'wishlist' ?
-                                                    <WishlistIcon color={color} size={size} />
-                                                    : iconType === 'arrow-left' ?
-                                                        <ArrowLeft color={color} size={size} />
-                    :
-
-                    null
-            }
-        </>
-    )
+    switch (iconType) {
+        case 'map':
+            return <MapIcon color={color} size={size} />;
+        case 'user':
+            return <UserIcon color={color} size={size} />;
+        case 'calendar':
+            return <CalendarIcon color={color} size={size} />;
+        case 'search':
+            return <SearchIcon color={color} size={size} />;
+        case 'close':
+            return <CloseIcon color={color} size={size} />;
+        case 'filter':
+            return <FilterIcon color={color} size={size} />;
+        case 'time':
+            return <TimeIcon color={color} size={size} />;
+        case 'location':
+            return <LocationIcon color={color} size={size} />;
+        case 'wishlist':
+            return <WishlistIcon color={color} size={size} />;
+        case 'arrow-left':
+            return <ArrowLeft color={color} size={size} />;
+        default:
+            return null;
+    }
 }
 
 export default Icon;
