@@ -59,7 +59,7 @@ export default function App() {
         {loggedStatus ? (
             <>
               <TabNavigator/>
-              {/*<Button title="Sign Out" onPress={signOut}/>*/}
+              <Button title="Sign Out" onPress={signOut}/>
             </>
         ) : (
             <>

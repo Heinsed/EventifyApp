@@ -39,7 +39,7 @@ const PreAuth = ({ onButtonPress }) => {
     const flatListRef = useRef(null);
     const [showButton, setShowButton] = useState(false);
     const [scrollEnabled, setScrollEnabled] = useState(true);
-
+    const [autoScrollPaused, setAutoScrollPaused] = useState(false);
 
 
     useEffect(() => {
@@ -53,7 +53,7 @@ const PreAuth = ({ onButtonPress }) => {
     }, [currentIndex]);
 
     useEffect(() => {
-        if (currentIndex === data.length - 1) {
+        if (currentIndex === data.length - 1 || autoScrollPaused ) {
             return;
         }
         const timer = setInterval(() => {
@@ -64,10 +64,10 @@ const PreAuth = ({ onButtonPress }) => {
                 });
                 setCurrentIndex((prevIndex) => (prevIndex + 1) % data.length);
             }
-        }, 10000);
+        }, 2000);
 
         return () => clearInterval(timer);
-    }, [currentIndex]);
+    }, [currentIndex, autoScrollPaused]);
 
     const handleScroll = (event) => {
         const contentOffsetX = event.nativeEvent.contentOffset.x;
@@ -79,6 +79,15 @@ const PreAuth = ({ onButtonPress }) => {
     const handleEndReached = () => {
         setShowButton(true);
     };
+
+    const handleScrollBeginDrag = () => {
+        setAutoScrollPaused(true);
+    };
+
+    const handleScrollEndDrag = () => {
+        setAutoScrollPaused(false);
+    };
+
 
     const renderDots = () => {
         return (
@@ -108,6 +117,8 @@ const PreAuth = ({ onButtonPress }) => {
                 onScroll={handleScroll}
                 onEndReached={handleEndReached}
                 scrollEnabled={scrollEnabled}
+                onScrollBeginDrag={handleScrollBeginDrag}
+                onScrollEndDrag={handleScrollEndDrag}
             />
             <BottomContainer>
             {renderDots()}
