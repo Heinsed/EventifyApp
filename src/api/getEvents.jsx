@@ -1,14 +1,22 @@
-import axios from 'axios';
+// import axios from 'axios';
+import eventData from './events.json';
 
 
-const apiUrl = 'https://app.ticketmaster.com/discovery/v2/events.json?countryCode=US&apikey=Up6v1Uny6W3wWgJ4RlpJDVCOUOAA3czw';
+
+// const fetchEventData = async () => {
+//     try {
+//         const response = await axios.get(apiUrl);
+//         return response.data;
+//     } catch (error) {
+//         throw new Error(error);
+//     }
+// };
 
 const fetchEventData = async () => {
     try {
-        const response = await axios.get(apiUrl);
-        return response.data;
+        return eventData;
     } catch (error) {
-        throw new Error('err');
+        throw new Error(error);
     }
 };
 

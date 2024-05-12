@@ -1,27 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Home from "./src/screens/home/Home";
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import TabNavigator from "./src/navigation/TabNavigator";
+
+
+
 
 export default function App() {
   const [fontLoaded] = useFonts({
     MontserratRegular: require('./assets/fonts/Montserrat-Regular.ttf'),
     MontserratBold: require('./assets/fonts/Montserrat-Bold.ttf'),
+    MontserratMedium: require('./assets/fonts/Montserrat-Medium.ttf'),
+    MontserratSemiBold: require('./assets/fonts/Montserrat-SemiBold.ttf'),
   });
 
+
+
   return (
-  <SafeAreaProvider>
-    <Home/>
-  </SafeAreaProvider>
+    <SafeAreaProvider>
+      <TabNavigator />
+    </SafeAreaProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
