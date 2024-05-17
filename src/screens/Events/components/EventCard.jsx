@@ -4,9 +4,10 @@ import styled from "styled-components/native";
 import {UI, UIStyles} from "../../../styles/UI";
 import Icon from "../../../components/Icon";
 import AddToWishlist from "../../../components/Wishlist/components/AddToWishlist";
+import EventCardDate from "./EventCardDate";
 
 
-const EventCard = ({itemID, image, title, date, year, time, location, permalink}) => {
+const EventCard = ({itemID, image, title, date, location, permalink}) => {
     return (
         <EventCardContainer>
             <EventCardImageWrapper>
@@ -23,17 +24,7 @@ const EventCard = ({itemID, image, title, date, year, time, location, permalink}
             <EventCardInformation>
                 <EventCardDateWrapper>
                     <Icon iconType={'time'} color={UIStyles.colors.green} size={24}/>
-                    <EventCardDateText>
-                        <EventCardDateDay>
-                            {date}
-                        </EventCardDateDay>
-                        <EventCardDateYear>
-                            {year}
-                        </EventCardDateYear>
-                        <EventCardDateTime>
-                            {time}
-                        </EventCardDateTime>
-                    </EventCardDateText>
+                    <EventCardDate date={date} />
                 </EventCardDateWrapper>
                 <EventCardLocationWrapper>
                     <Icon iconType={'location'} color={UIStyles.colors.green} size={24}/>
@@ -92,25 +83,7 @@ const EventCardDateWrapper = styled.View(() =>({
     marginBottom: 15,
 }));
 
-const EventCardDateText = styled.View(() =>({
-    flexDirection: 'row',
-    gap: 30,
-}));
 
-const EventCardDateDay = styled.Text(() =>({
-    fontSize: 13,
-    fontFamily: 'MontserratMedium',
-}));
-
-const EventCardDateYear = styled.Text(() =>({
-    fontSize: 13,
-    fontFamily: 'MontserratMedium',
-}));
-
-const EventCardDateTime = styled.Text(() =>({
-    fontSize: 13,
-    fontFamily: 'MontserratMedium',
-}));
 
 
 const EventCardLocationWrapper = styled.View(() =>({

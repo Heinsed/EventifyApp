@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "268165761671",
+    "project_id": "hilleleventify",
+    "storage_bucket": "hilleleventify.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268165761671:android:610a0022c95f5a46bec622",
+        "android_client_info": {
+          "package_name": "hilleleventify.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhMTO9EN9NzP0W4hkg5duOVbryu7Jrc98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

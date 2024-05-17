@@ -14,7 +14,7 @@ function TabNavigator() {
 
     return (
         <NavigationContainer>
-            <Tab.Navigator initialRouteName="Map" tabBar={props => <Tabs {...props} />}   >
+            <Tab.Navigator initialRouteName="Map" tabBar={Tabs}   >
                 <Tab.Screen name="Events" component={Events} options={{icon: 'calendar', headerShown: false, tabBarHideOnKeyboard: true}}/>
                 <Tab.Screen name="Map" component={Home} options={{headerShown: false, icon: 'map'}}/>
                 <Tab.Screen name="Profile" component={Profile} options={{icon: 'user'}} />

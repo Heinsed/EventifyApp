@@ -12,12 +12,7 @@ const Tabs = ({ state, descriptors, navigation }) => {
             <NavigationWrapper>
             {state.routes.map((route, index) => {
                 const { options } = descriptors[route.key];
-                const label =
-                    options.tabBarLabel !== undefined
-                        ? options.tabBarLabel
-                        : options.title !== undefined
-                            ? options.title
-                            : route.name;
+
                 const icon = options.icon;
 
                 const isFocused = state.index === index;
@@ -41,7 +36,7 @@ const Tabs = ({ state, descriptors, navigation }) => {
                         targetFunction={onPress}
                         key={route.key}
                     >
-                        <TabItem title={label} isFocused={isFocused} iconType={icon} />
+                        <TabItem isFocused={isFocused} iconType={icon} />
                     </CustomPressable>
                 );
             })}
@@ -55,7 +50,7 @@ const TabsNavigation = styled.SafeAreaView( () => ({
     background: 'white',
     borderTopWidth: 1,
     borderTopColor: UIStyles.colors.lightGrey,
-    margin: 0
+    marginTop: 0
 }));
 
 const NavigationWrapper = styled.View( () => ({

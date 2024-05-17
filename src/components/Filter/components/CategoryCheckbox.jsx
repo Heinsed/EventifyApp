@@ -5,7 +5,7 @@ import {useRef} from "react";
 
 
 
-const CategoryCheckbox = ({ category, isChecked, onChange }) => {
+const CategoryCheckbox = ({ categoryTitle, isChecked, onChange }) => {
     return (
         <FilterCheckbox>
             <BouncyCheckbox
@@ -18,7 +18,7 @@ const CategoryCheckbox = ({ category, isChecked, onChange }) => {
                 innerIconStyle={{ borderRadius: 5, borderWidth: 1, borderColor: UIStyles.colors.green }}
                 iconStyle={{ borderRadius: 5 }}
             />
-            <CheckboxTitle>{category}</CheckboxTitle>
+            <CheckboxTitle>{categoryTitle}</CheckboxTitle>
         </FilterCheckbox>
     )
 }
