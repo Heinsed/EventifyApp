@@ -4,7 +4,7 @@ import {Button, TextInput, View, StyleSheet, Keyboard, TouchableWithoutFeedback}
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import styled from "styled-components/native";
-import {UIStyles} from "../../../styles/UI";
+import UIStyles from "../../../styles/UI";
 import MaskInput from "react-native-mask-input";
 import CustomPressable from "../../../components/CustomPressable";
 import {SafeAreaView} from "react-native-safe-area-context";

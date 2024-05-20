@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import CustomPressable from "../../CustomPressable";
-import {UIStyles} from "../../../styles/UI";
+import UIStyles from "../../../styles/UI";
 import Icon from "../../Icon";
 
 

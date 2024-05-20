@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import {useEffect, useState} from "react";
 import CustomPressable from "../CustomPressable";
-import {UIStyles} from "../../styles/UI";
+import UIStyles from "../../styles/UI";
 import Icon from "../Icon";
 import WishlistModal from "./components/WishlistModal";
 

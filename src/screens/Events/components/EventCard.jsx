@@ -1,15 +1,27 @@
-import {Image, View, Text, TouchableOpacity} from 'react-native';
+import {Image, View, Text, TouchableOpacity, Share} from 'react-native';
 import {useState} from "react";
 import styled from "styled-components/native";
-import {UI, UIStyles} from "../../../styles/UI";
+import UIStyles from "../../../styles/UI";
 import Icon from "../../../components/Icon";
 import AddToWishlist from "../../../components/Wishlist/components/AddToWishlist";
 import EventCardDate from "./EventCardDate";
+import CustomPressable from "../../../components/CustomPressable";
 
 
 const EventCard = ({itemID, image, title, date, location, permalink}) => {
+    const onShare = async () => {
+        try {
+            await Share.share({
+                message: `Доєднуйся до івенту ${title} за адресою: ${location} о ${date}`
+            });
+        } catch (error) {
+            console.log('Помилка:', error.message);
+        }
+    };
+
+
     return (
-        <EventCardContainer>
+        <EventCardContainer onPress={}>
             <EventCardImageWrapper>
                 <EventCardImage
                     source={{
@@ -20,6 +32,9 @@ const EventCard = ({itemID, image, title, date, location, permalink}) => {
             <EventCardTitleWrapper>
                 <EventCardTitle numberOfLines={1}>{title}</EventCardTitle>
                 <AddToWishlist itemID={itemID} />
+                <ShareButton targetFunction={() => onShare()}>
+                    <Icon iconType={'share'} color={UIStyles.colors.green} size={24} />
+                </ShareButton>
             </EventCardTitleWrapper>
             <EventCardInformation>
                 <EventCardDateWrapper>
@@ -60,7 +75,7 @@ const EventCardImage = styled.Image(() =>({
 const EventCardTitleWrapper = styled.View(() =>({
     marginBottom: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     gap: 10,
     alignItems: 'center',
 }));
@@ -69,7 +84,10 @@ const EventCardTitle = styled.Text(() =>({
     fontSize: 18,
     textTransform: 'uppercase',
     fontFamily: 'MontserratSemiBold',
-    maxWidth: '90%',
+    textAlign: 'left',
+    margin: '0 auto',
+    marginLeft: 0,
+    maxWidth: '80%',
 }));
 
 const EventCardInformation = styled.View(() =>({
@@ -97,6 +115,10 @@ const EventCardLocationText = styled.Text(() =>({
     fontFamily: 'MontserratMedium',
     flexWrap: 'wrap',
     flex: 1,
+}));
+
+const ShareButton = styled(CustomPressable)(() =>({
+
 }));
 
 

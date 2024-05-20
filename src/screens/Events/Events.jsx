@@ -6,13 +6,14 @@ import {
     StyleSheet,
     Text,
     TouchableWithoutFeedback,
-    View
+    View,
+    RefreshControl
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EventsStackNavigator from "../../navigation/EventsStackNavigator";
 import SearchInput from "../../components/SearchInput";
+import UIStyles from "../../styles/UI";
 import styled from "styled-components/native";
-import {UIStyles} from "../../styles/UI";
 import FilterEvents from "../../components/Filter/Filter";
 import EventCard from "./components/EventCard";
 import {useState, useEffect} from "react";
@@ -24,21 +25,47 @@ const Events = () => {
     const [events, setEvents] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedSearch, setSelectedSearch] = useState('');
+    const [refreshing, setRefreshing] = useState(true);
+    const [lastVisible, setLastVisible] = useState(null);
+    const [loadingMore, setLoadingMore] = useState(false);
+
+    const fetchData = async (isLoadMore = false) => {
+        try {
+            const { events: newEvents, lastVisible: newLastVisible } = await fetchEvents(isLoadMore ? lastVisible : null);
+
+            if (isLoadMore) {
+                if (newEvents.length > 0) {
+                    setEvents(prevEvents => [...prevEvents, ...newEvents]);
+                    setLastVisible(newLastVisible);
+                }
+            } else {
+                setEvents(newEvents);
+                setLastVisible(newLastVisible);
+            }
+
+            setRefreshing(false);
+            setLoadingMore(false);
+        } catch (error) {
+            console.error(error.message);
+            setRefreshing(false);
+            setLoadingMore(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await fetchEvents();
-
-                setEvents(data);
-            } catch (error) {
-                console.error(error.message);
-            }
-        };
-
         fetchData();
     }, []);
 
+
+
+
+    const handleLoadMore = () => {
+        if (!loadingMore && lastVisible) {
+            setLoadingMore(true);
+            fetchData(true);
+        }
+        console.log(filteredEvents)
+    };
 
 
     const handleCategoryChange = (categories) => {
@@ -83,7 +110,12 @@ const Events = () => {
                         keyExtractor={item => item.id}
                         keyboardShouldPersistTaps='handled'
                         keyboardDismissMode="on-drag"
-
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={() => fetchData()} />
+                        }
+                        onEndReached={handleLoadMore}
+                        onEndReachedThreshold={0}
+                        ListFooterComponent={loadingMore ? <Text>Завантаження...</Text> : null}
                     />
 
                     {/*TODO: Fix bottom padding when scrolling*/}
