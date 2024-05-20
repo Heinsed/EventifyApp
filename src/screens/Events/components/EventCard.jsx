@@ -5,11 +5,20 @@ import {UI, UIStyles} from "../../../styles/UI";
 import Icon from "../../../components/Icon";
 import AddToWishlist from "../../../components/Wishlist/components/AddToWishlist";
 import EventCardDate from "./EventCardDate";
+import {useNavigation} from "@react-navigation/native";
 
 
 const EventCard = ({itemID, image, title, date, location, permalink}) => {
+
+
+    const navigation = useNavigation();
+
+    const showDetails = () => {
+        navigation.navigate('EventDetails', { itemID, image, title, date, location, permalink });
+    };
+
     return (
-        <EventCardContainer>
+        <EventCardContainer onPress={showDetails}>
             <EventCardImageWrapper>
                 <EventCardImage
                     source={{
@@ -38,7 +47,7 @@ const EventCard = ({itemID, image, title, date, location, permalink}) => {
 }
 
 
-const EventCardContainer = styled.View(() =>({
+const EventCardContainer = styled.TouchableOpacity(() =>({
     borderBottomWidth: 1,
     borderBottomColor: UIStyles.colors.grey,
     marginTop: 20,
