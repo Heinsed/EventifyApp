@@ -5,8 +5,11 @@ import styled from 'styled-components/native';
 import MapView from 'react-native-map-clustering';
 import { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
-import {UIStyles} from "../../styles/UI";
+import UIStyles from "../../styles/UI";
 import {fetchEvents} from "../../utils/getEvents";
+
+
+
 
 const initialRegion = {
     latitude: 1,
@@ -16,6 +19,7 @@ const initialRegion = {
 };
 
 const Home = () => {
+
     const mapRef = React.useRef();
     const [location, setLocation] = useState(null);
     const [events, setEvents] = useState([]);
@@ -123,6 +127,8 @@ const Home = () => {
 
     );
 };
+
+
 
 const styles = StyleSheet.create({
     map: {

@@ -1,5 +1,5 @@
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import {UIStyles} from "../../../styles/UI";
+import UIStyles from "../../../styles/UI";
 import styled from "styled-components/native";
 import {useRef} from "react";
 

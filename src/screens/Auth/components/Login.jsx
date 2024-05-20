@@ -4,7 +4,7 @@ import firestore from "@react-native-firebase/firestore";
 import {useState} from "react";
 import CustomPressable from "../../../components/CustomPressable";
 import styled from "styled-components/native";
-import {UIStyles} from "../../../styles/UI";
+import UIStyles from "../../../styles/UI";
 import {SafeAreaView} from "react-native-safe-area-context";
 import TextField from '../../../components/FormInput';
 

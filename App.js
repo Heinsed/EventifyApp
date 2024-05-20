@@ -1,12 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import {StyleSheet, Text, View, Button, Appearance, Dimensions} from 'react-native';
 import {useEffect, useState} from "react";
 import { useFonts } from 'expo-font';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import TabNavigator from "./src/navigation/TabNavigator";
 import Auth from './src/screens/Auth/Auth';
 import auth from "@react-native-firebase/auth";
 import PreAuth from "./src/screens/PreAuth/PreAuth";
+import {ThemeProvider} from './src/providers/ThemeProvider';
+import styled from "styled-components/native";
+import EventsStackNavigator from "./src/navigation/EventsStackNavigator";
+
 
 
 
@@ -18,6 +22,10 @@ export default function App() {
     MontserratMedium: require('./assets/fonts/Montserrat-Medium.ttf'),
     MontserratSemiBold: require('./assets/fonts/Montserrat-SemiBold.ttf'),
   });
+
+
+
+
 
   const [loggedStatus, setLoggedStatus] = useState(false);
   const [user, setUser] = useState(null);
@@ -55,21 +63,26 @@ export default function App() {
   }
 
   return (
-      <SafeAreaProvider>
-        {loggedStatus ? (
-            <>
-              <TabNavigator/>
-              <Button title="Sign Out" onPress={signOut}/>
-            </>
-        ) : (
-            <>
-              {!showAuth ? (
-                  <PreAuth onButtonPress={() => setShowAuth(true)}/>
-              ) : (
-                  <Auth/>
-              )}
-            </>
-        )}
-      </SafeAreaProvider>
+      <ThemeProvider>
+        <SafeAreaProvider>
+          {loggedStatus ? (
+              <>
+                <TabNavigator/>
+
+                <Button title="Sign Out" onPress={signOut}/>
+              </>
+          ) : (
+              <>
+                {!showAuth ? (
+                    <PreAuth onButtonPress={() => setShowAuth(true)}/>
+                ) : (
+                    <Auth/>
+                )}
+              </>
+          )}
+        </SafeAreaProvider>
+      </ThemeProvider>
   );
 }
+
+

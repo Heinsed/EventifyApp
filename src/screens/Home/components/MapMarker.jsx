@@ -1,10 +1,12 @@
 import {Marker} from "react-native-maps";
 import styled from "styled-components/native";
-import {UIStyles} from "../../../styles/UI";
+import UIStyles from "../../../styles/UI";
+
+
 
 
 const MapMarker = ({image}) => {
-
+    console.log(UIStyles)
     return(
         <>
             <MarkerCircle>

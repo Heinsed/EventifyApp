@@ -6,7 +6,7 @@ import {useState, useRef, useEffect} from "react";
 import CustomPressable from "../../components/CustomPressable";
 import Auth from '../Auth/Auth';
 import Slide from "./components/Slide";
-import {UIStyles} from "../../styles/UI";
+import UIStyles from "../../styles/UI";
 
 const data = [
     {
@@ -33,8 +33,9 @@ const data = [
     }
 
 ];
-
+console.log(UIStyles);
 const PreAuth = ({ onButtonPress }) => {
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const flatListRef = useRef(null);
     const [showButton, setShowButton] = useState(false);
