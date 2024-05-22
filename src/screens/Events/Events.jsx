@@ -119,7 +119,6 @@ const Events = () => {
                     />
 
                     {/*TODO: Fix bottom padding when scrolling*/}
-            
 
 
         </EventsScreen>
