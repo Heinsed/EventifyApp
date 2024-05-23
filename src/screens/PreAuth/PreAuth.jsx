@@ -105,12 +105,16 @@ const PreAuth = ({ onButtonPress }) => {
         );
     };
 
+    const renderItem = ({ item }) => {
+        return <Slide itemID={item.id} title={item.title} image={item.image} />;
+    };
+
     return (
         <PreAuthScreen>
             <FlatList
                 ref={flatListRef}
                 data={data}
-                renderItem={({item}) => <Slide itemID={item.id} title={item.title} image={item.image} />}
+                renderItem={renderItem}
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}

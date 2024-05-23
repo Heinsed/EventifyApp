@@ -1,32 +1,29 @@
-// Registration.js
-import React, { useState } from "react";
-import {Button, TextInput, View, StyleSheet, Keyboard, TouchableWithoutFeedback} from "react-native";
+import React, { useState, useCallback } from "react";
+import { Button, TextInput, View, StyleSheet, Keyboard, TouchableWithoutFeedback } from "react-native";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import styled from "styled-components/native";
 import UIStyles from "../../../styles/UI";
-import MaskInput from "react-native-mask-input";
 import CustomPressable from "../../../components/CustomPressable";
-import {SafeAreaView} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import TextField from "../../../components/FormInput";
 import Icon from "../../../components/Icon";
 
-
-const Registration = ({navigation}) => {
+const Registration = ({ navigation }) => {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [code, setCode] = useState("");
     const [confirmation, setConfirmation] = useState(null);
-
     const [errorLogin, setErrorLogin] = useState('');
-    const sendOTP = async () => {
-        if(phoneNumber != '' && phoneNumber.length === 23) {
+
+    const sendOTP = useCallback(async () => {
+        if (phoneNumber !== '' && phoneNumber.length === 23) {
             try {
                 const phone = phoneNumber.replace(/[\s()-]/g, '');
                 const usersSnapshot = await firestore().collection("users").doc(phone).get();
                 if (usersSnapshot.exists) {
-                    setErrorLogin('Цей користувач вже зареєстрований.')
+                    setErrorLogin('Цей користувач вже зареєстрований.');
                     return;
                 }
                 const confirmation = await auth().signInWithPhoneNumber(phone);
@@ -36,13 +33,12 @@ const Registration = ({navigation}) => {
                 console.error("Error sending OTP:", error);
                 setErrorLogin('Помилка. Спробуйте ще раз');
             }
-        }else{
+        } else {
             setErrorLogin('Невірний номер телефону');
         }
-    };
+    }, [phoneNumber]);
 
-
-    const confirmCode = async () => {
+    const confirmCode = useCallback(async () => {
         try {
             await confirmation.confirm(code);
             console.log("User is signed in successfully!");
@@ -51,12 +47,10 @@ const Registration = ({navigation}) => {
             console.error("Error confirming code:", error);
             setErrorLogin('Невірний код підтвердження');
         }
-    };
+    }, [code, confirmation, createUser]);
 
-
-    const createUser = async () => {
+    const createUser = useCallback(async () => {
         try {
-
             await firestore().collection("users").doc(phoneNumber).set({
                 id: phoneNumber,
                 name: name,
@@ -67,103 +61,102 @@ const Registration = ({navigation}) => {
         } catch (error) {
             console.error("Error registering user:", error);
         }
-    };
+    }, [phoneNumber, name, email]);
 
+    const handlePhoneNumberChange = useCallback((masked, unmasked) => {
+        setPhoneNumber(masked);
+        setErrorLogin('');
+    }, []);
 
+    const handleNameChange = useCallback((text) => {
+        setName(text);
+    }, []);
+
+    const handleEmailChange = useCallback((text) => {
+        setEmail(text);
+    }, []);
+
+    const handleCodeChange = useCallback((masked, unmasked) => {
+        setCode(masked);
+        setErrorLogin('');
+    }, []);
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-
-        <LoginScreen>
-
+            <LoginScreen>
                 <RegisterScreenHeader>
-                    <BackButton
-                        targetFunction={() => navigation.popToTop()}>
-                        <Icon iconType='arrow-left' color={UIStyles.colors.green} size={32}/>
+                    <BackButton targetFunction={() => navigation.popToTop()}>
+                        <Icon iconType='arrow-left' color={UIStyles.colors.green} size={32} />
                     </BackButton>
                 </RegisterScreenHeader>
 
-                    {confirmation ? (
-                        <LoginForm>
-                            <WrapperTitleCode>
-                                Верифікація
-                            </WrapperTitleCode>
-                            <WrapperContent>
-                                Будь ласка, пройдіть авторизацію щоб продовжити користуватись додатком.
-                            </WrapperContent>
-                            <FieldContainer>
-                                <CodeInput
-                                    value={code}
-                                    aria-valuemin={6}
-                                    aria-valuemax={6}
-                                    autoFocus={true}
-                                    onChangeText={(masked, unmasked) => {
-                                        setCode(masked);
-                                        setErrorLogin('');
-                                    }}
-                                    mask={[/\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
-                                    placeholderFillCharacter='-'
-                                />
-                                <WrapperError>{errorLogin}</WrapperError>
-                            </FieldContainer>
-                            <ButtonsContainer>
-                                <ButtonDefault targetFunction={confirmCode}>
-                                    <ButtonDefaultText>Підтвердити</ButtonDefaultText>
-                                </ButtonDefault>
-                            </ButtonsContainer>
-                        </LoginForm>
-                    ) : (
-                       <LoginForm>
-                           <WrapperTitleCode>
-                               Реєстрація
-                           </WrapperTitleCode>
-                           <WrapperContent>
-                               Будь ласка, пройдіть реєстрацію щоб продовжити користуватись додатком.
-                           </WrapperContent>
-                           <FieldContainer>
-                               <TextField
-                                   value={name}
-                                   onChangeText={setName}
-                                   placeholder="Ім'я"
-
-                               />
-                               <TextField
-                                   value={email}
-                                   onChangeText={setEmail}
-                                   placeholder="E-mail"
-                                   keyboardType="email-address"
-                                   autoCapitalize="none"
-                               />
-                               <TextField
-                                   value={phoneNumber}
-                                   placeholder="Номер телефону"
-                                   keyboardType="phone-pad"
-                                   aria-valuemin={11}
-                                   aria-valuemax={11}
-
-
-                                   onChangeText={(masked, unmasked) => {
-                                       setPhoneNumber(masked);
-                                       setErrorLogin('');
-                                   }}
-                                   mask={['+', /\d/, /\d/, ' (', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, ' - ', /\d/, /\d/, ' - ', /\d/, /\d/]}
-                                   placeholderFillCharacter='_'
-                               />
-                               <WrapperError>{errorLogin}</WrapperError>
-                           </FieldContainer>
-                           <ButtonsContainer>
-                               <ButtonDefault targetFunction={sendOTP}>
-                                   <ButtonDefaultText>Продовжити</ButtonDefaultText>
-                               </ButtonDefault>
-                           </ButtonsContainer>
-                       </LoginForm>
-                    )}
-
-
-
-
-        </LoginScreen>
-
+                {confirmation ? (
+                    <LoginForm>
+                        <WrapperTitleCode>
+                            Верифікація
+                        </WrapperTitleCode>
+                        <WrapperContent>
+                            Будь ласка, пройдіть авторизацію щоб продовжити користуватись додатком.
+                        </WrapperContent>
+                        <FieldContainer>
+                            <CodeInput
+                                value={code}
+                                aria-valuemin={6}
+                                aria-valuemax={6}
+                                autoFocus={true}
+                                onChangeText={handleCodeChange}
+                                mask={[/\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
+                                placeholderFillCharacter='-'
+                            />
+                            <WrapperError>{errorLogin}</WrapperError>
+                        </FieldContainer>
+                        <ButtonsContainer>
+                            <ButtonDefault targetFunction={confirmCode}>
+                                <ButtonDefaultText>Підтвердити</ButtonDefaultText>
+                            </ButtonDefault>
+                        </ButtonsContainer>
+                    </LoginForm>
+                ) : (
+                    <LoginForm>
+                        <WrapperTitleCode>
+                            Реєстрація
+                        </WrapperTitleCode>
+                        <WrapperContent>
+                            Будь ласка, пройдіть реєстрацію щоб продовжити користуватись додатком.
+                        </WrapperContent>
+                        <FieldContainer>
+                            <TextField
+                                value={name}
+                                onChangeText={handleNameChange}
+                                placeholder="Ім'я"
+                            />
+                            <TextField
+                                value={email}
+                                onChangeText={handleEmailChange}
+                                placeholder="E-mail"
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
+                            <TextField
+                                value={phoneNumber}
+                                placeholder="Номер телефону"
+                                keyboardType="phone-pad"
+                                aria-valuemin={11}
+                                aria-valuemax={11}
+                                onChangeText={handlePhoneNumberChange}
+                                mask={['+', /\d/, /\d/, ' (', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, ' - ', /\d/, /\d/, ' - ', /\d/, /\d/]}
+                                placeholderFillCharacter='_'
+                            />
+                            <WrapperError>{errorLogin}</WrapperError>
+                        </FieldContainer>
+                        <ButtonsContainer>
+                            <ButtonDefault targetFunction={sendOTP}>
+                                <ButtonDefaultText>Продовжити</ButtonDefaultText>
+                            </ButtonDefault>
+                        </ButtonsContainer>
+                    </LoginForm>
+                )}
+            </LoginScreen>
         </TouchableWithoutFeedback>
     );
 };
@@ -180,7 +173,6 @@ const BackButton = styled(CustomPressable)({
     height: 32,
 });
 
-
 const LoginScreen = styled(SafeAreaView)({
     flex: 1,
 });
@@ -192,16 +184,12 @@ const LoginForm = styled.View({
     height: '100%'
 });
 
-
-
 const WrapperTitleCode = styled.Text({
     fontFamily: 'MontserratBold',
     fontSize: 24,
     color: UIStyles.colors.black,
     textAlign: 'center'
 });
-
-
 
 const WrapperContent = styled.Text({
     textAlign: 'center',
@@ -219,9 +207,7 @@ const WrapperError = styled.Text({
     color: UIStyles.colors.dark,
 });
 
-
-
-const CodeInput = styled(TextField)(({isFocused}) => ({
+const CodeInput = styled(TextField)(({ isFocused }) => ({
     padding: 16,
     marginTop: 20,
     letterSpacing: 10,
@@ -234,9 +220,7 @@ const CodeInput = styled(TextField)(({isFocused}) => ({
 
 const FieldContainer = styled.View({
     flex: 1,
-
 });
-
 
 const ButtonsContainer = styled.View({
     marginLeft: -24,
@@ -247,7 +231,6 @@ const ButtonsContainer = styled.View({
     paddingBottom: 18,
     borderTopWidth: 0.2,
     borderTopColor: UIStyles.colors.dark,
-
 });
 
 const ButtonDefault = styled(CustomPressable)({
@@ -256,7 +239,6 @@ const ButtonDefault = styled(CustomPressable)({
     alignItems: 'center',
     background: UIStyles.colors.green,
     borderRadius: 12,
-
 });
 
 const ButtonDefaultText = styled.Text({
@@ -270,7 +252,6 @@ const ButtonLink = styled(CustomPressable)({
     alignItems: 'center',
     marginBottom: 20,
 });
-
 
 const ButtonLinkText = styled.Text({
     fontSize: 16,

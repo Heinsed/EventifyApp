@@ -1,26 +1,20 @@
+import React, { useCallback, useEffect, useState } from "react";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    Switch,
-    View,
-    Image,
-    StatusBar,
-    Platform,
-    Linking,
     Alert,
-    Appearance,
-    Dimensions
-} from 'react-native';
-import React, {useCallback, useEffect, useState} from "react";
-import {getCurrentUser} from '../../utils/User/getUser';
-import CustomPressable from "../../components/CustomPressable";
-import {useTheme} from "../../providers/ThemeProvider";
+    Dimensions,
+    Linking,
+    Platform,
+    StatusBar,
+    StyleSheet,
+    Switch,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
-import {SafeAreaView} from "react-native-safe-area-context";
-
-
-
+import CustomPressable from "../../components/CustomPressable";
+import { getCurrentUser } from "../../utils/User/getUser";
+import { useTheme } from "../../providers/ThemeProvider";
 
 const Profile = () => {
     const [user, setUser] = useState([]);
@@ -41,8 +35,7 @@ const Profile = () => {
         fetchUser();
     }, []);
 
-
-    const alertModal = () => {
+    const alertModal = useCallback(() => {
         Alert.alert(
             'Це тестовий алерт',
             'тест мсг',
@@ -65,33 +58,46 @@ const Profile = () => {
                         'Андроід би сприйняв тап за межами алерту',
                     ),
             },
-        )
-    }
+        );
+    }, []);
 
-    const ButtonContact = ({url, children}) => {
-        const handlePress = useCallback(async () => {
-            await Linking.openURL(url);
-        }, [url]);
-        return <CustomPressable targetFunction={handlePress}>{children}</CustomPressable>;
+    const handlePress = useCallback(async (url) => {
+        await Linking.openURL(url);
+    }, []);
+
+    const ButtonContact = ({ url, children }) => {
+        return (
+            <CustomPressable targetFunction={() => handlePress(url)}>
+                {children}
+            </CustomPressable>
+        );
     };
-
 
     return (
         <View>
-            <CustomPressable targetFunction={() => alertModal()}>
+            <CustomPressable targetFunction={alertModal}>
                 <Text>Press to alert!</Text>
             </CustomPressable>
-            <ButtonContact url={'tel:+380677432894'}><Text>Phone</Text></ButtonContact>
-            <ButtonContact url={'mailto:vkinev6@gmail.com'}><Text>E-mail</Text></ButtonContact>
-            <ButtonContact url={'sms:+380677432894'}><Text>SMS</Text></ButtonContact>
-            <ButtonContact url={'https://reactnative.dev/docs/linking?language=javascript'}><Text>WEB</Text></ButtonContact>
-          <Text>Profile, {user.name}</Text>
+            <ButtonContact url={"tel:+380677432894"}>
+                <Text>Phone</Text>
+            </ButtonContact>
+            <ButtonContact url={"mailto:vkinev6@gmail.com"}>
+                <Text>E-mail</Text>
+            </ButtonContact>
+            <ButtonContact url={"sms:+380677432894"}>
+                <Text>SMS</Text>
+            </ButtonContact>
+            <ButtonContact
+                url={
+                    "https://reactnative.dev/docs/linking?language=javascript"
+                }
+            >
+                <Text>WEB</Text>
+            </ButtonContact>
+            <Text>Profile, {user.name}</Text>
+            <Switch value={isAutoTheme} onValueChange={toggleAutoTheme} />
             <Switch
-                value={isAutoTheme}
-                onValueChange={toggleAutoTheme}
-            />
-            <Switch
-                value={!isAutoTheme && theme === 'dark'}
+                value={!isAutoTheme && theme === "dark"}
                 onValueChange={toggleManualTheme}
                 disabled={isAutoTheme}
             />
@@ -100,12 +106,8 @@ const Profile = () => {
     );
 };
 
-const Title = styled(Text)(({  }) => ({
-    color: currentTheme === 'light' ? 'black' : 'red'
+const Title = styled(Text)(({}) => ({
+    color: currentTheme === "light" ? "black" : "red",
 }));
-
-
-
-
 
 export default Profile;
