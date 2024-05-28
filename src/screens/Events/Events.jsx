@@ -117,6 +117,7 @@ const EventsScreen = styled(SafeAreaView)(() => ({
 }));
 
 const EventsList = styled(FlatList)(() => ({
+    flex: 1,
     borderTopWidth: 1,
     borderTopColor: UIStyles.colors.grey,
     marginTop: 20,
