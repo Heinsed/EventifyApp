@@ -2,7 +2,7 @@ import {View, Text, TouchableOpacity, Pressable} from 'react-native';
 import {SafeAreaView} from "react-native-safe-area-context";
 import TabItem from "./components/TabItem";
 import styled from "styled-components/native";
-import {UIStyles} from "../../styles/UI";
+import UIStyles from "../../styles/UI";
 import CustomPressable from "../../components/CustomPressable";
 
 

@@ -8,6 +8,7 @@ import TimeIcon from '@iconscout/react-native-unicons/icons/uil-clock-eight';
 import LocationIcon from '@iconscout/react-native-unicons/icons/uil-map-marker';
 import WishlistIcon from '@iconscout/react-native-unicons/icons/uil-heart';
 import ArrowLeft from '@iconscout/react-native-unicons/icons/uil-arrow-left';
+import ShareIcon from '@iconscout/react-native-unicons/icons/uil-share-alt';
 
 const Icon = ({iconType, color, size}) =>{
     switch (iconType) {
@@ -31,6 +32,8 @@ const Icon = ({iconType, color, size}) =>{
             return <WishlistIcon color={color} size={size} />;
         case 'arrow-left':
             return <ArrowLeft color={color} size={size} />;
+        case 'share':
+            return <ShareIcon color={color} size={size} />;
         default:
             return null;
     }

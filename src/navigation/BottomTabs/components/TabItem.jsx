@@ -1,6 +1,6 @@
 import {View, Text} from "react-native";
 import styled from "styled-components/native";
-import {UIStyles} from "../../../styles/UI";
+import UIStyles from "../../../styles/UI";
 import Icon from "../../../components/Icon";
 
 const TabItem = ({isFocused, iconType}) => {

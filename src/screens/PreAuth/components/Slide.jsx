@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import {Dimensions, View, Image} from "react-native";
 import { SvgCssUri } from 'react-native-svg/css';
-import {UIStyles} from "../../../styles/UI";
+import UIStyles from "../../../styles/UI";
 import {SafeAreaView} from "react-native-safe-area-context";
 
 const Slide = ({ title, image }) => {

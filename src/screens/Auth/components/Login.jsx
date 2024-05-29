@@ -1,11 +1,11 @@
-import {View, TextInput, Button, StyleSheet, Keyboard, TouchableWithoutFeedback} from "react-native";
+import { View, TextInput, Button, StyleSheet, Keyboard, TouchableWithoutFeedback } from "react-native";
 import auth from '@react-native-firebase/auth';
 import firestore from "@react-native-firebase/firestore";
-import {useState} from "react";
+import { useState, useCallback } from "react";
 import CustomPressable from "../../../components/CustomPressable";
 import styled from "styled-components/native";
-import {UIStyles} from "../../../styles/UI";
-import {SafeAreaView} from "react-native-safe-area-context";
+import UIStyles from "../../../styles/UI";
+import { SafeAreaView } from "react-native-safe-area-context";
 import TextField from '../../../components/FormInput';
 
 const Login = ({ navigation }) => {
@@ -15,8 +15,8 @@ const Login = ({ navigation }) => {
     const [isFocused, setFocused] = useState(false);
     const [errorLogin, setErrorLogin] = useState('');
 
-    const sendOTP = async () => {
-        if(phoneNumber != '' && phoneNumber.length === 23){
+    const sendOTP = useCallback(async () => {
+        if (phoneNumber !== '' && phoneNumber.length === 23) {
             try {
                 const phone = phoneNumber.replace(/[\s()-]/g, '');
                 console.log(phone);
@@ -32,101 +32,97 @@ const Login = ({ navigation }) => {
                 console.error("Error sending OTP:", error);
                 setErrorLogin('Помилка. Спробуйте ще раз');
             }
-        }else{
+        } else {
             setErrorLogin('Невірний номер телефону');
         }
+    }, [phoneNumber]);
 
-    };
-
-
-    const confirmCode = async () => {
+    const confirmCode = useCallback(async () => {
         try {
             await confirmation.confirm(code);
             console.log("User is signed in successfully!");
         } catch (error) {
             console.error("Error confirming code:", error);
-        }     setErrorLogin('Невірний код підтвердження');
-    };
+            setErrorLogin('Невірний код підтвердження');
+        }
+    }, [code, confirmation]);
+
+    const handlePhoneNumberChange = useCallback((masked, unmasked) => {
+        setPhoneNumber(masked);
+        setErrorLogin('');
+    }, []);
+
+    const handleCodeChange = useCallback((masked, unmasked) => {
+        setCode(masked);
+        setErrorLogin('');
+    }, []);
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <LoginScreen>
-
-            <LoginForm>
-                {confirmation ? (
-                    <>
-                        <WrapperTitleCode>
-                            Верифікація
-                        </WrapperTitleCode>
-                        <WrapperContent>
-                            Будь ласка, пройдіть авторизацію щоб продовжити користуватись додатком.
-                        </WrapperContent>
-                        <FieldContainer>
-                        <CodeInput
-                            value={code}
-                            aria-valuemin={6}
-                            aria-valuemax={6}
-                            autoFocus={true}
-
-                            onChangeText={(masked, unmasked) => {
-                                setCode(masked);
-                                setErrorLogin('');
-                            }}
-                            mask={[/\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
-                            placeholderFillCharacter='-'
-                        />
-                            <WrapperError>{errorLogin}</WrapperError>
-                        </FieldContainer>
-                        <ButtonsContainer>
-                        <ButtonDefault targetFunction={confirmCode}>
-                            <ButtonDefaultText>Підтвердити</ButtonDefaultText>
-                        </ButtonDefault>
-                        </ButtonsContainer>
-                    </>
-                ) : (
-                    <>
-                        <WrapperLogo>
-                            Eventify
-                        </WrapperLogo>
-                        <WrapperTitle>
-                            Вас вітає додаток <TextColor>Eventify</TextColor>! Будь ласка, увійдіть у свій акаунт
-                        </WrapperTitle>
-                        <FieldContainer>
-                        <TextField
-                            value={phoneNumber}
-                            placeholder="Номер телефону"
-                            keyboardType="phone-pad"
-                            aria-valuemin={11}
-                            aria-valuemax={11}
-
-                            onChangeText={(masked, unmasked) => {
-                                setPhoneNumber(masked);
-                                setErrorLogin('');
-                            }}
-                            mask={['+', /\d/, /\d/, ' (', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, ' - ', /\d/, /\d/, ' - ', /\d/, /\d/]}
-                            placeholderFillCharacter='_'
-                        />
-                            <WrapperError>{errorLogin}</WrapperError>
-                        </FieldContainer>
-                        <ButtonLink targetFunction={() => navigation.navigate("Registration")} >
-                            <ButtonLinkText>В мене немає акаунта</ButtonLinkText>
-                        </ButtonLink>
-                        <ButtonsContainer>
-                        <ButtonDefault targetFunction={sendOTP}>
-                            <ButtonDefaultText>Продовжити</ButtonDefaultText>
-                        </ButtonDefault>
-                        </ButtonsContainer>
-                    </>
-                )}
-
-            </LoginForm>
-
-        </LoginScreen>
+            <LoginScreen>
+                <LoginForm>
+                    {confirmation ? (
+                        <>
+                            <WrapperTitleCode>
+                                Верифікація
+                            </WrapperTitleCode>
+                            <WrapperContent>
+                                Будь ласка, пройдіть авторизацію щоб продовжити користуватись додатком.
+                            </WrapperContent>
+                            <FieldContainer>
+                                <CodeInput
+                                    value={code}
+                                    aria-valuemin={6}
+                                    aria-valuemax={6}
+                                    autoFocus={true}
+                                    onChangeText={handleCodeChange}
+                                    mask={[/\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
+                                    placeholderFillCharacter='-'
+                                />
+                                <WrapperError>{errorLogin}</WrapperError>
+                            </FieldContainer>
+                            <ButtonsContainer>
+                                <ButtonDefault targetFunction={confirmCode}>
+                                    <ButtonDefaultText>Підтвердити</ButtonDefaultText>
+                                </ButtonDefault>
+                            </ButtonsContainer>
+                        </>
+                    ) : (
+                        <>
+                            <WrapperLogo>
+                                Eventify
+                            </WrapperLogo>
+                            <WrapperTitle>
+                                Вас вітає додаток <TextColor>Eventify</TextColor>! Будь ласка, увійдіть у свій акаунт
+                            </WrapperTitle>
+                            <FieldContainer>
+                                <TextField
+                                    value={phoneNumber}
+                                    placeholder="Номер телефону"
+                                    keyboardType="phone-pad"
+                                    aria-valuemin={11}
+                                    aria-valuemax={11}
+                                    onChangeText={handlePhoneNumberChange}
+                                    mask={['+', /\d/, /\d/, ' (', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, ' - ', /\d/, /\d/, ' - ', /\d/, /\d/]}
+                                    placeholderFillCharacter='_'
+                                />
+                                <WrapperError>{errorLogin}</WrapperError>
+                            </FieldContainer>
+                            <ButtonLink targetFunction={() => navigation.navigate("Registration")}>
+                                <ButtonLinkText>В мене немає акаунта</ButtonLinkText>
+                            </ButtonLink>
+                            <ButtonsContainer>
+                                <ButtonDefault targetFunction={sendOTP}>
+                                    <ButtonDefaultText>Продовжити</ButtonDefaultText>
+                                </ButtonDefault>
+                            </ButtonsContainer>
+                        </>
+                    )}
+                </LoginForm>
+            </LoginScreen>
         </TouchableWithoutFeedback>
-
     );
 };
-
 
 const LoginScreen = styled(SafeAreaView)({
     flex: 1,
@@ -179,9 +175,7 @@ const WrapperError = styled.Text({
     color: UIStyles.colors.dark,
 });
 
-
-
-const CodeInput = styled(TextField)(({isFocused}) => ({
+const CodeInput = styled(TextField)(({ isFocused }) => ({
     padding: 16,
     marginTop: 20,
     letterSpacing: 10,
@@ -194,9 +188,7 @@ const CodeInput = styled(TextField)(({isFocused}) => ({
 
 const FieldContainer = styled.View({
     flex: 1,
-
 });
-
 
 const ButtonsContainer = styled.View({
     marginLeft: -24,
@@ -215,7 +207,6 @@ const ButtonDefault = styled(CustomPressable)({
     alignItems: 'center',
     background: UIStyles.colors.green,
     borderRadius: 12,
-
 });
 
 const ButtonDefaultText = styled.Text({
@@ -230,12 +221,10 @@ const ButtonLink = styled(CustomPressable)({
     marginBottom: 20,
 });
 
-
 const ButtonLinkText = styled.Text({
     fontSize: 16,
     fontFamily: 'MontserratSemiBold',
     color: UIStyles.colors.green
 });
-
 
 export default Login;

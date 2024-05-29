@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import {UIStyles} from "../styles/UI";
+import UIStyles from "../styles/UI";
 import {useState} from "react";
 import Icon from "./Icon";
 import {Keyboard} from "react-native";
