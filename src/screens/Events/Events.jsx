@@ -1,12 +1,7 @@
-import React, { useEffect, useCallback } from 'react';
-import {
-    FlatList,
-    Platform,
-    StatusBar,
-    Text,
-    RefreshControl,
-} from 'react-native';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Platform, StatusBar, Text, RefreshControl, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Animated, { useAnimatedScrollHandler, useSharedValue, useAnimatedStyle, withTiming, Easing, clamp } from 'react-native-reanimated';
 import SearchInput from "../../components/SearchInput";
 import UIStyles from "../../styles/UI";
 import styled from "styled-components/native";
@@ -15,8 +10,11 @@ import EventCard from "./components/EventCard";
 import { observer } from "mobx-react-lite";
 import mainStore from "../../stores/MainStore";
 
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const Events = observer(() => {
+    const scrollY = useSharedValue(0);
+
     const { eventsStore } = mainStore;
 
     const {
@@ -25,11 +23,13 @@ const Events = observer(() => {
         loadingMore,
         fetchData,
         lastVisible,
-        setRefreshing,
-        setLoadingMore,
         searchQuery,
         selectedCategories
     } = eventsStore;
+
+    useEffect(() => {
+        eventsStore.fetchData(false);
+    }, []);
 
     const handleLoadMore = useCallback(() => {
         if (
@@ -56,23 +56,52 @@ const Events = observer(() => {
         <EventCard itemID={item.id} title={item.title} image={item.image} date={item.date} location={item.location} />
     );
 
+    const scrollHandler = useAnimatedScrollHandler({
+        onScroll: (event) => {
+            scrollY.value = event.contentOffset.y;
+        },
+    });
+
+
+    const headerStyle = useAnimatedStyle(() => {
+        return {
+            transform: [
+                {
+                    translateY: -clamp(scrollY.value, 0, 300),
+
+                },
+            ],
+        };
+    });
+
+    const flatListStyle = useAnimatedStyle(() => {
+        return {
+            marginTop: -clamp(scrollY.value, 0, 200),
+        };
+    });
+
     return (
         <EventsScreen>
             <StatusBar barStyle={Platform.OS === 'ios' ? "dark-content" : 'dark-content'} backgroundColor={'white'} />
-            <SearchInput onSearchChange={handleSearchChange} title={'Івенти'} />
-            <FilterEvents onFilterChange={handleCategoryChange} />
+            <AnimatedHeader style={headerStyle}>
+                <SearchInput onSearchChange={handleSearchChange} title={'Івенти'} />
+                <FilterEvents onFilterChange={handleCategoryChange} />
+            </AnimatedHeader>
             <EventsList
                 data={events}
                 renderItem={eventCard}
                 keyExtractor={item => item.id}
                 keyboardShouldPersistTaps='handled'
                 keyboardDismissMode="on-drag"
+                style={flatListStyle}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={() => eventsStore.fetchData()} />
                 }
                 onEndReached={handleLoadMore}
                 onEndReachedThreshold={0.5}
                 ListFooterComponent={loadingMore ? <Text>Завантаження...</Text> : null}
+                onScroll={scrollHandler}
+                scrollEventThrottle={16}
             />
         </EventsScreen>
     );
@@ -83,13 +112,16 @@ const EventsScreen = styled(SafeAreaView)(() => ({
     flex: 1,
 }));
 
-const EventsList = styled(FlatList)(() => ({
+const EventsList = styled(AnimatedFlatList)(() => ({
     flex: 1,
-    borderTopWidth: 1,
-    borderTopColor: UIStyles.colors.grey,
-    marginTop: 20,
     paddingLeft: 24,
     paddingRight: 24,
+}));
+
+const AnimatedHeader = styled(Animated.View)(() => ({
+    borderBottomWidth: 1,
+    borderBottomColor: UIStyles.colors.grey,
+    paddingBottom: 20,
 }));
 
 export default Events;

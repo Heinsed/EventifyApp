@@ -133,6 +133,7 @@ const FilterContainer = styled.View( () => ({
     paddingBottom: 0,
     paddingLeft: 24,
     paddingRight: 24,
+    overflow: 'hidden',
 }));
 
 const FilterButton = styled(CustomPressable)(() => ({

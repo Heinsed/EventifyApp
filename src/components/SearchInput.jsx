@@ -58,6 +58,7 @@ const SearchInputContainer = styled.View(() => ({
     alignItems: 'center',
     paddingLeft: 24,
     paddingRight: 24,
+    overflow: 'hidden',
     gap: 12,
     justifyContent: 'space-between',
     flexWrap: 'wrap'
