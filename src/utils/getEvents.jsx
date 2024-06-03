@@ -5,7 +5,7 @@ const fetchEvents = async (lastVisible = null, searchQuery = '', selectedCategor
         let query = firestore().collection('events');
 
 
-        if (searchQuery) {
+        if (searchQuery && selectedCategories.length === 0) {
             query = query.where('title', '>=', searchQuery).where('title', '<=', searchQuery + '\uf8ff');
         }
 
@@ -25,7 +25,7 @@ const fetchEvents = async (lastVisible = null, searchQuery = '', selectedCategor
         }
 
 
-        const snapshot = await query.limit(3).get();
+        const snapshot = await query.limit(10).get();
 
         if (snapshot.empty) {
             return { events: [], lastVisible: null };

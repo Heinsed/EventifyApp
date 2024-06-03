@@ -21,6 +21,41 @@ const getCategories = async () => {
 };
 
 
+const getCategoryForEvent = async (eventId) => {
+    try {
+        // Получаем документ ивента
+        const eventDoc = await firestore().collection('events').doc(eventId).get();
 
-export { getCategories };
+        if (eventDoc.exists) {
+            const eventData = eventDoc.data();
+            const categoryRef = eventData.categoryRef;
+
+            if (categoryRef && categoryRef._documentPath && categoryRef._documentPath._parts) {
+                // Получаем путь категории из _documentPath._parts
+                const categoryPath = categoryRef._documentPath._parts.join('/');
+
+                // Получаем документ категории по пути
+                const categoryDoc = await firestore().doc(categoryPath).get();
+
+                if (categoryDoc.exists) {
+                    return categoryDoc.data();
+                } else {
+                    console.log('Category does not exist');
+                    return null;
+                }
+            } else {
+                console.log('Invalid category reference');
+                return null;
+            }
+        } else {
+            console.log('Event does not exist');
+            return null;
+        }
+    } catch (error) {
+        console.error("Error getting category: ", error);
+    }
+};
+
+
+export { getCategories, getCategoryForEvent };
 

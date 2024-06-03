@@ -10,7 +10,7 @@ class EventsStore {
     @observable selectedCategories = [];
 
     constructor() {
-        this.fetchData(false);
+
         makeObservable(this);
     }
 

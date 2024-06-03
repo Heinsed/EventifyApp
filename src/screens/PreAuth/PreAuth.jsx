@@ -7,6 +7,9 @@ import CustomPressable from "../../components/CustomPressable";
 import Auth from '../Auth/Auth';
 import Slide from "./components/Slide";
 import UIStyles from "../../styles/UI";
+import mainStore from "../../stores/MainStore";
+const { themeStore } = mainStore;
+const currentTheme = themeStore.theme;
 
 const data = [
     {
@@ -41,6 +44,7 @@ const PreAuth = ({ onButtonPress }) => {
     const [showButton, setShowButton] = useState(false);
     const [scrollEnabled, setScrollEnabled] = useState(true);
     const [autoScrollPaused, setAutoScrollPaused] = useState(false);
+
 
 
     useEffect(() => {
@@ -139,7 +143,7 @@ const PreAuth = ({ onButtonPress }) => {
 
 const PreAuthScreen = styled(SafeAreaView)({
     flex: 1,
-    background: UIStyles.colors.green
+    background: currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green
 });
 
 const BottomContainer = styled.View({
@@ -153,7 +157,7 @@ const BottomContainer = styled.View({
 });
 
 const ContinueButton = styled(CustomPressable)({
-    background: UIStyles.colors.darkGreen,
+    background: currentTheme === 'dark' ? UIStyles.dark.darkGreen : UIStyles.light.darkGreen,
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 8,
@@ -164,7 +168,7 @@ const ContinueButton = styled(CustomPressable)({
 });
 
 const ContinueButtonText = styled.Text({
-    color: UIStyles.colors.white,
+    color: currentTheme === 'dark' ? UIStyles.dark.white : UIStyles.light.white,
     fontSize: 16,
     fontFamily: 'MontserratSemiBold'
 });
@@ -181,7 +185,7 @@ const DotsItem = styled.View({
     width: 8,
     height: 8,
     borderRadius: 8,
-    background: UIStyles.colors.white
+    background: currentTheme === 'dark' ? UIStyles.dark.white : UIStyles.light.white
 });
 
 

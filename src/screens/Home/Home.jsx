@@ -1,11 +1,16 @@
-import { StyleSheet, StatusBar, Platform } from 'react-native';
+import { StyleSheet, StatusBar, Platform, Text } from 'react-native';
 import React, { useEffect, useLayoutEffect, useState, useCallback, useRef } from "react";
 import styled from 'styled-components/native';
 import MapView from 'react-native-map-clustering';
 import { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import UIStyles from "../../styles/UI";
-import { fetchEvents } from "../../utils/getEvents";
+import mainStore from "../../stores/MainStore";
+import {lightMapStyle, darkMapStyle} from "../../styles/MapStyles";
+import {observer} from "mobx-react-lite";
+import EventDetails from './components/EventDetails';
+
+
 
 const initialRegion = {
     latitude: 1,
@@ -14,24 +19,26 @@ const initialRegion = {
     longitudeDelta: 0.2,
 };
 
-const Home = () => {
+const Home = observer(() => {
+    const { themeStore, eventsStore } = mainStore;
+    const currentTheme = themeStore.theme;
+
     const mapRef = useRef();
     const [location, setLocation] = useState(null);
-    const [events, setEvents] = useState([]);
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
+    const eventDetails = useRef();
 
-    const fetchData = useCallback(async () => {
-        try {
-            const { events: newEvents } = await fetchEvents();
-            setEvents(newEvents);
-        } catch (error) {
-            console.error(error.message);
-        }
-    }, []);
+    const {
+        events,
+        fetchData,
+    } = eventsStore;
 
-    useEffect(() => {
-        fetchData();
+    useLayoutEffect(() => {
+        eventsStore.fetchData(false);
     }, [fetchData]);
+
+
 
     useLayoutEffect(() => {
         (async () => {
@@ -58,24 +65,30 @@ const Home = () => {
     const handleMarkerPress = useCallback((event) => {
         if (mapRef.current) {
             mapRef.current.animateToRegion({
-                latitude: event.geo.latitude,
+                latitude: event.geo.latitude - 0.002,
                 longitude: event.geo.longitude,
-                latitudeDelta: 0.0002,
-                longitudeDelta: 0.0002,
+                latitudeDelta: 0.005,
+                longitudeDelta: 0.005,
             });
         }
+        setSelectedEvent(event);
+        eventDetails.current.show()
     }, []);
 
     return (
         <>
-            <StatusBar barStyle={Platform.OS === 'ios' ? "dark-content" : 'light-content'} />
+            <StatusBar
+                barStyle={currentTheme === 'dark' ? "light-content" : "dark-content"}
+                backgroundColor={currentTheme === 'dark' ? UIStyles.dark.background : UIStyles.light.background}
+            />
             <MapView
                 ref={mapRef}
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
                 showsUserLocation={true}
                 initialRegion={initialRegion}
-                clusterColor={UIStyles.colors.green}
+                clusterColor={currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green}
+                customMapStyle={currentTheme === 'dark' ? darkMapStyle : lightMapStyle}
             >
                 {events.length > 0 &&
                     events.map((event, id) => (
@@ -87,7 +100,7 @@ const Home = () => {
                             }}
                             onPress={() => handleMarkerPress(event)}
                         >
-                            <MarkerCircle>
+                            <MarkerCircle currentTheme={currentTheme}>
                                 <MarkerImage
                                     source={{
                                         uri: event.image,
@@ -99,9 +112,10 @@ const Home = () => {
                     ))
                 }
             </MapView>
+            <EventDetails eventDetails={eventDetails} setSelectedEvent={setSelectedEvent} selectedEvent={selectedEvent} />
         </>
     );
-};
+});
 
 const styles = StyleSheet.create({
     map: {
@@ -109,14 +123,14 @@ const styles = StyleSheet.create({
     },
 });
 
-const MarkerCircle = styled.View({
+const MarkerCircle = styled.View(({currentTheme})=> ({
     width: 50,
     height: 50,
     borderRadius: 50,
     overflow: 'hidden',
     borderWidth: 5,
-    borderColor: UIStyles.colors.green,
-});
+    borderColor: currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green,
+}));
 
 const MarkerImage = styled.Image({
     width: 40,
@@ -124,13 +138,13 @@ const MarkerImage = styled.Image({
     borderRadius: 50,
 });
 
-const MarkerDot = styled.View({
+const MarkerDot = styled.View(({currentTheme})=> ({
     width: 10,
     height: 10,
     borderRadius: 10,
-    backgroundColor: UIStyles.colors.green,
+    backgroundColor: currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green,
     alignSelf: 'center',
     marginTop: -5
-});
+}));
 
 export default Home;

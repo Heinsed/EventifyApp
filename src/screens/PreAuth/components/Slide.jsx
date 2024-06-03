@@ -3,6 +3,9 @@ import {Dimensions, View, Image} from "react-native";
 import { SvgCssUri } from 'react-native-svg/css';
 import UIStyles from "../../../styles/UI";
 import {SafeAreaView} from "react-native-safe-area-context";
+import mainStore from "../../../stores/MainStore";
+const { themeStore } = mainStore;
+const currentTheme = themeStore.theme;
 
 const Slide = ({ title, image }) => {
 
@@ -41,7 +44,7 @@ const ContentContainer = styled.View({
 const WrapperTitle = styled.Text({
     textAlign: 'center',
     marginTop: 50,
-    color: UIStyles.colors.white,
+    color: currentTheme === 'dark' ? UIStyles.dark.white : UIStyles.light.white,
     fontSize: 22,
     fontFamily: 'MontserratBold'
 })

@@ -12,7 +12,7 @@ function EventsStackNavigator() {
     return (
         <Stack.Navigator >
             <Stack.Screen name="Events" component={Events} options={{headerShown:false}}  />
-            <Stack.Screen name="EventDetails" component={EventDetails} options={{headerShown:false, presentation: 'modal'}} />
+            <Stack.Screen name="EventDetails" component={EventDetails} options={{headerShown:false, tabBarStyle: { display: 'none' }  }} />
         </Stack.Navigator>
     );
 }
