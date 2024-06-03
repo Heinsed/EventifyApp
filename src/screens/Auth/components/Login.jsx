@@ -7,6 +7,9 @@ import styled from "styled-components/native";
 import UIStyles from "../../../styles/UI";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextField from '../../../components/FormInput';
+import mainStore from "../../../stores/MainStore";
+const { themeStore } = mainStore;
+const currentTheme = themeStore.theme;
 
 const Login = ({ navigation }) => {
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -16,6 +19,7 @@ const Login = ({ navigation }) => {
     const [errorLogin, setErrorLogin] = useState('');
 
     const sendOTP = useCallback(async () => {
+        setErrorLogin('');
         if (phoneNumber !== '' && phoneNumber.length === 23) {
             try {
                 const phone = phoneNumber.replace(/[\s()-]/g, '');
@@ -100,6 +104,7 @@ const Login = ({ navigation }) => {
                                     value={phoneNumber}
                                     placeholder="Номер телефону"
                                     keyboardType="phone-pad"
+                                    placeholderTextColor={currentTheme === 'dark' ? UIStyles.light.lightGrey : UIStyles.light.lightGrey}
                                     aria-valuemin={11}
                                     aria-valuemax={11}
                                     onChangeText={handlePhoneNumberChange}
@@ -126,6 +131,7 @@ const Login = ({ navigation }) => {
 
 const LoginScreen = styled(SafeAreaView)({
     flex: 1,
+    background: currentTheme === 'dark' ? UIStyles.dark.white : UIStyles.light.white,
 });
 
 const LoginForm = styled.View({
@@ -138,25 +144,25 @@ const LoginForm = styled.View({
 const WrapperTitle = styled.Text({
     fontFamily: 'MontserratBold',
     fontSize: 24,
-    color: UIStyles.colors.black,
+    color: currentTheme === 'dark' ? UIStyles.dark.black : UIStyles.light.black,
 });
 
 const WrapperTitleCode = styled.Text({
     fontFamily: 'MontserratBold',
     fontSize: 24,
-    color: UIStyles.colors.black,
+    color: currentTheme === 'dark' ? UIStyles.dark.black : UIStyles.light.black,
     textAlign: 'center'
 });
 
 const WrapperLogo = styled.Text({
     fontFamily: 'MontserratBold',
     fontSize: 48,
-    color: UIStyles.colors.green,
+    color: currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green,
     marginBottom: 50,
 });
 
 const TextColor = styled.Text({
-    color: UIStyles.colors.green,
+    color: currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green,
 });
 
 const WrapperContent = styled.Text({
@@ -164,7 +170,7 @@ const WrapperContent = styled.Text({
     fontFamily: 'MontserratRegular',
     fontSize: 12,
     marginTop: 15,
-    color: UIStyles.colors.dark,
+    color: currentTheme === 'dark' ? UIStyles.dark.dark : UIStyles.light.dark,
 });
 
 const WrapperError = styled.Text({
@@ -172,14 +178,14 @@ const WrapperError = styled.Text({
     fontFamily: 'MontserratRegular',
     fontSize: 12,
     marginTop: 15,
-    color: UIStyles.colors.dark,
+    color: currentTheme === 'dark' ? UIStyles.dark.dark : UIStyles.light.dark,
 });
 
 const CodeInput = styled(TextField)(({ isFocused }) => ({
     padding: 16,
     marginTop: 20,
     letterSpacing: 10,
-    borderBottomColor: isFocused ? UIStyles.colors.green : UIStyles.colors.dark,
+    borderBottomColor: isFocused ? (currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green) : (currentTheme === 'dark' ? UIStyles.dark.lightGrey : UIStyles.light.lightGrey),
     borderBottomWidth: 0.2,
     fontSize: 32,
     textAlign: 'center',
@@ -198,21 +204,21 @@ const ButtonsContainer = styled.View({
     paddingTop: 18,
     paddingBottom: 18,
     borderTopWidth: 0.2,
-    borderTopColor: UIStyles.colors.dark
+    borderTopColor: currentTheme === 'dark' ? UIStyles.dark.dark : UIStyles.light.dark
 });
 
 const ButtonDefault = styled(CustomPressable)({
     width: '100%',
     padding: 21,
     alignItems: 'center',
-    background: UIStyles.colors.green,
+    background: currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green,
     borderRadius: 12,
 });
 
 const ButtonDefaultText = styled.Text({
     fontSize: 16,
     fontFamily: 'MontserratSemiBold',
-    color: UIStyles.colors.white
+    color: currentTheme === 'dark' ? UIStyles.dark.white : UIStyles.light.white
 });
 
 const ButtonLink = styled(CustomPressable)({
@@ -224,7 +230,7 @@ const ButtonLink = styled(CustomPressable)({
 const ButtonLinkText = styled.Text({
     fontSize: 16,
     fontFamily: 'MontserratSemiBold',
-    color: UIStyles.colors.green
+    color: currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green
 });
 
 export default Login;

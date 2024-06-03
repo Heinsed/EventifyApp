@@ -8,6 +8,9 @@ import CustomPressable from "../../../components/CustomPressable";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextField from "../../../components/FormInput";
 import Icon from "../../../components/Icon";
+import mainStore from "../../../stores/MainStore";
+const { themeStore } = mainStore;
+const currentTheme = themeStore.theme;
 
 const Registration = ({ navigation }) => {
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -86,7 +89,7 @@ const Registration = ({ navigation }) => {
             <LoginScreen>
                 <RegisterScreenHeader>
                     <BackButton targetFunction={() => navigation.popToTop()}>
-                        <Icon iconType='arrow-left' color={UIStyles.colors.green} size={32} />
+                        <Icon iconType='arrow-left' color={currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green} size={32} />
                     </BackButton>
                 </RegisterScreenHeader>
 
@@ -175,6 +178,7 @@ const BackButton = styled(CustomPressable)({
 
 const LoginScreen = styled(SafeAreaView)({
     flex: 1,
+    background: currentTheme === 'dark' ? UIStyles.dark.white : UIStyles.light.white,
 });
 
 const LoginForm = styled.View({
@@ -187,7 +191,7 @@ const LoginForm = styled.View({
 const WrapperTitleCode = styled.Text({
     fontFamily: 'MontserratBold',
     fontSize: 24,
-    color: UIStyles.colors.black,
+    color: currentTheme === 'dark' ? UIStyles.dark.black : UIStyles.light.black,
     textAlign: 'center'
 });
 
@@ -196,7 +200,7 @@ const WrapperContent = styled.Text({
     fontFamily: 'MontserratRegular',
     fontSize: 12,
     marginTop: 15,
-    color: UIStyles.colors.dark,
+    color: currentTheme === 'dark' ? UIStyles.dark.black : UIStyles.light.black,
 });
 
 const WrapperError = styled.Text({
@@ -204,14 +208,14 @@ const WrapperError = styled.Text({
     fontFamily: 'MontserratRegular',
     fontSize: 12,
     marginTop: 15,
-    color: UIStyles.colors.dark,
+    color: currentTheme === 'dark' ? UIStyles.dark.dark : UIStyles.light.dark
 });
 
 const CodeInput = styled(TextField)(({ isFocused }) => ({
     padding: 16,
     marginTop: 20,
     letterSpacing: 10,
-    borderBottomColor: isFocused ? UIStyles.colors.green : UIStyles.colors.dark,
+    borderBottomColor: isFocused ? (currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green) : (currentTheme === 'dark' ? UIStyles.dark.dark : UIStyles.light.dark),
     borderBottomWidth: 0.2,
     fontSize: 32,
     textAlign: 'center',
@@ -230,21 +234,21 @@ const ButtonsContainer = styled.View({
     paddingTop: 18,
     paddingBottom: 18,
     borderTopWidth: 0.2,
-    borderTopColor: UIStyles.colors.dark,
+    borderTopColor: currentTheme === 'dark' ? UIStyles.dark.dark : UIStyles.light.dark,
 });
 
 const ButtonDefault = styled(CustomPressable)({
     width: '100%',
     padding: 21,
     alignItems: 'center',
-    background: UIStyles.colors.green,
+    background: currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green,
     borderRadius: 12,
 });
 
 const ButtonDefaultText = styled.Text({
     fontSize: 16,
     fontFamily: 'MontserratSemiBold',
-    color: UIStyles.colors.white
+    color: currentTheme === 'dark' ? UIStyles.dark.white : UIStyles.light.white
 });
 
 const ButtonLink = styled(CustomPressable)({
@@ -256,7 +260,7 @@ const ButtonLink = styled(CustomPressable)({
 const ButtonLinkText = styled.Text({
     fontSize: 16,
     fontFamily: 'MontserratSemiBold',
-    color: UIStyles.colors.green
+    color: currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green
 });
 
 export default Registration;

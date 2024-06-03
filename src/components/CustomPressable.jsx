@@ -1,7 +1,10 @@
 import {Pressable} from "react-native";
 import styled from "styled-components/native";
-const CustomPressable = ({children, targetFunction, ...rest}) => {
+import mainStore from "../stores/MainStore";
 
+const CustomPressable = ({children, targetFunction, ...rest}) => {
+    const { themeStore } = mainStore;
+    const currentTheme = themeStore.theme;
     return(
         <Pressable
             android_ripple={{
@@ -15,7 +18,7 @@ const CustomPressable = ({children, targetFunction, ...rest}) => {
                 opacity: pressed ? 0.8 : 1,
                 ...rest.style,
             })}
-
+            currentTheme={currentTheme}
         >
             {children}
         </Pressable>

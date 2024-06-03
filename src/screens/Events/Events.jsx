@@ -10,10 +10,15 @@ import EventCard from "./components/EventCard";
 import { observer } from "mobx-react-lite";
 import mainStore from "../../stores/MainStore";
 
+
+
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const Events = observer(() => {
     const scrollY = useSharedValue(0);
+
+    const { themeStore } = mainStore;
+    const currentTheme = themeStore.theme;
 
     const { eventsStore } = mainStore;
 
@@ -29,7 +34,7 @@ const Events = observer(() => {
 
     useEffect(() => {
         eventsStore.fetchData(false);
-    }, []);
+    }, [fetchData]);
 
     const handleLoadMore = useCallback(() => {
         if (
@@ -53,7 +58,7 @@ const Events = observer(() => {
     }, [eventsStore]);
 
     const eventCard = ({ item }) => (
-        <EventCard itemID={item.id} title={item.title} image={item.image} date={item.date} location={item.location} />
+        <EventCard event={item} />
     );
 
     const scrollHandler = useAnimatedScrollHandler({
@@ -81,9 +86,12 @@ const Events = observer(() => {
     });
 
     return (
-        <EventsScreen>
-            <StatusBar barStyle={Platform.OS === 'ios' ? "dark-content" : 'dark-content'} backgroundColor={'white'} />
-            <AnimatedHeader style={headerStyle}>
+        <EventsScreen currentTheme={currentTheme}>
+            <StatusBar
+                barStyle={currentTheme === 'dark' ? "light-content" : "dark-content"}
+                backgroundColor={currentTheme === 'dark' ? UIStyles.dark.background : UIStyles.light.background}
+            />
+            <AnimatedHeader style={headerStyle} currentTheme={currentTheme}>
                 <SearchInput onSearchChange={handleSearchChange} title={'Івенти'} />
                 <FilterEvents onFilterChange={handleCategoryChange} />
             </AnimatedHeader>
@@ -107,8 +115,8 @@ const Events = observer(() => {
     );
 });
 
-const EventsScreen = styled(SafeAreaView)(() => ({
-    background: UIStyles.colors.white,
+const EventsScreen = styled(SafeAreaView)(({currentTheme}) => ({
+    background: currentTheme === 'dark' ? UIStyles.dark.white : UIStyles.light.white,
     flex: 1,
 }));
 
@@ -118,9 +126,9 @@ const EventsList = styled(AnimatedFlatList)(() => ({
     paddingRight: 24,
 }));
 
-const AnimatedHeader = styled(Animated.View)(() => ({
+const AnimatedHeader = styled(Animated.View)(({currentTheme}) => ({
     borderBottomWidth: 1,
-    borderBottomColor: UIStyles.colors.grey,
+    borderBottomColor: currentTheme === 'dark' ? UIStyles.dark.lightGrey : UIStyles.light.grey,
     paddingBottom: 20,
 }));
 

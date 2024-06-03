@@ -8,15 +8,20 @@ import UIStyles from "../../styles/UI";
 import CustomPressable from "../CustomPressable";
 import CategoryCheckbox from "./components/CategoryCheckbox";
 import {getCategories} from "../../utils/getCategories";
+import mainStore from "../../stores/MainStore";
+import {observer} from "mobx-react-lite";
 
 
 
-const FilterEvents = ({onFilterChange}) =>{
+
+
+const FilterEvents = observer(({onFilterChange}) =>{
     const [modalVisible, setModalVisible] = useState(false);
     const [categories, setCategories] = useState([]);
     const [categoriesCheckboxes, setCategoriesCheckboxes] = useState(categories.map(() => false));
     const [selectedCategories, setSelectedCategories] = useState([]);
-
+    const { themeStore } = mainStore;
+    const currentTheme = themeStore.theme;
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -63,9 +68,9 @@ const FilterEvents = ({onFilterChange}) =>{
 
         <FilterContainer>
 
-            <FilterButton targetFunction={() => setModalVisible(true)}>
-                <Icon iconType={"filter"} size={28} color={UIStyles.colors.white}/>
-                <FilterButtonTitle>Фільтр ({selectedCategories !== '' ? selectedCategories.length : null})</FilterButtonTitle>
+            <FilterButton targetFunction={() => setModalVisible(true)} currentTheme={currentTheme}>
+                <Icon iconType={"filter"} size={28} color={currentTheme === 'dark' ? UIStyles.dark.dark : UIStyles.light.white}/>
+                <FilterButtonTitle currentTheme={currentTheme}>Фільтр ({selectedCategories !== '' ? selectedCategories.length : null})</FilterButtonTitle>
             </FilterButton>
 
             <FilterModal
@@ -74,14 +79,15 @@ const FilterEvents = ({onFilterChange}) =>{
                 onRequestClose={() => {
                     setModalVisible(!modalVisible);
                 }}
+
             >
-                <FilterModalContainer>
-                    <HeaderContainer>
+                <FilterModalContainer currentTheme={currentTheme}>
+                    <HeaderContainer currentTheme={currentTheme}>
                         <FilterCloseButton targetFunction={() => setModalVisible(false)}>
-                            <Icon iconType={"close"} size={28} color={UIStyles.colors.green}/>
+                            <Icon iconType={"close"} size={28} color={currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green}/>
                         </FilterCloseButton>
-                        <FilterHeaderTitle>Фільтр ({selectedCategories !== '' ? selectedCategories.length : null})</FilterHeaderTitle>
-                        <FilterClearButton targetFunction={() => clearFilter()}>
+                        <FilterHeaderTitle currentTheme={currentTheme}>Фільтр ({selectedCategories !== '' ? selectedCategories.length : null})</FilterHeaderTitle>
+                        <FilterClearButton currentTheme={currentTheme} targetFunction={() => clearFilter()}>
                             <FilterClearButtonTitle>Очистити</FilterClearButtonTitle>
                         </FilterClearButton>
                     </HeaderContainer>
@@ -89,7 +95,7 @@ const FilterEvents = ({onFilterChange}) =>{
                         <FilterSections>
                             <FilterSection>
                                 <FilterSectionHeader>
-                                    <FilterSectionTitle>Категорія</FilterSectionTitle>
+                                    <FilterSectionTitle currentTheme={currentTheme}>Категорія</FilterSectionTitle>
                                 </FilterSectionHeader>
                                 <FilterSectionContainer>
                                     {categories.map((category, index) => (
@@ -111,10 +117,10 @@ const FilterEvents = ({onFilterChange}) =>{
                         </FilterSections>
                     </Container>
                 </FilterModalContainer>
-                <FilterSubmitWrapper>
+                <FilterSubmitWrapper currentTheme={currentTheme}>
                     <FilterSubmitArea>
-                        <SubmitButton targetFunction={() => {submitFilter()}}>
-                            <SubmitButtonTitle>
+                        <SubmitButton currentTheme={currentTheme} targetFunction={() => {submitFilter()}}>
+                            <SubmitButtonTitle currentTheme={currentTheme}>
                                 Застосувати
                             </SubmitButtonTitle>
                         </SubmitButton>
@@ -125,7 +131,7 @@ const FilterEvents = ({onFilterChange}) =>{
         </FilterContainer>
 
     )
-}
+});
 
 const FilterContainer = styled.View( () => ({
     minWidth: '100%',
@@ -136,8 +142,8 @@ const FilterContainer = styled.View( () => ({
     overflow: 'hidden',
 }));
 
-const FilterButton = styled(CustomPressable)(() => ({
-    backgroundColor: UIStyles.colors.green,
+const FilterButton = styled(CustomPressable)(({currentTheme}) => ({
+    backgroundColor: currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green,
     flexDirection: 'row',
     alignItems: 'center',
     padding: 8,
@@ -146,23 +152,25 @@ const FilterButton = styled(CustomPressable)(() => ({
     justifyContent: 'center',
 }));
 
-const FilterButtonTitle = styled.Text( () => ({
+const FilterButtonTitle = styled.Text( ({currentTheme}) => ({
     fontSize: 16,
     fontFamily: 'MontserratMedium',
-    color: UIStyles.colors.white
+    color: currentTheme === 'dark' ? UIStyles.dark.dark : UIStyles.light.white,
 }));
 
 const FilterModal = styled.Modal( () => ({
     flex: 1,
     height: '100%',
+
 }));
 
-const FilterModalContainer = styled.SafeAreaView( () => ({
+const FilterModalContainer = styled.SafeAreaView( ({currentTheme}) => ({
     flex: 1,
-    height: '100%'
+    height: '100%',
+    background: currentTheme === 'dark' ? UIStyles.dark.white : UIStyles.light.white,
 }));
 
-const HeaderContainer = styled.View( () => ({
+const HeaderContainer = styled.View( ({currentTheme}) => ({
     height: 60,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -170,7 +178,7 @@ const HeaderContainer = styled.View( () => ({
     paddingLeft: 24,
     paddingRight: 24,
     borderBottomWidth: 1,
-    borderBottomColor: UIStyles.colors.lightGrey,
+    borderBottomColor: currentTheme === 'dark' ? UIStyles.dark.lightGrey : UIStyles.light.lightGrey,
 
 }));
 
@@ -179,10 +187,10 @@ const FilterCloseButton = styled(CustomPressable)( () => ({
 }));
 
 
-const FilterHeaderTitle = styled.Text( () => ({
+const FilterHeaderTitle = styled.Text( ({currentTheme}) => ({
     fontSize: 18,
     fontFamily: 'MontserratBold',
-    color: UIStyles.colors.black,
+    color: currentTheme === 'dark' ? UIStyles.dark.black : UIStyles.light.black,
     textAlign: 'center',
     flex: 1
 }));
@@ -192,10 +200,10 @@ const FilterClearButton = styled(CustomPressable)( () => ({
 
 }));
 
-const FilterClearButtonTitle = styled.Text( () => ({
+const FilterClearButtonTitle = styled.Text( ({currentTheme}) => ({
     fontSize: 14,
     fontFamily: 'MontserratBold',
-    color: UIStyles.colors.green,
+    color: currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green,
     textAlign: 'right',
     top: 2,
 }));
@@ -214,10 +222,10 @@ const FilterSectionHeader = styled.View( () => ({
     paddingBottom: 10,
 }));
 
-const FilterSectionTitle = styled.Text( () => ({
+const FilterSectionTitle = styled.Text( ({currentTheme}) => ({
     fontSize: 24,
     fontFamily: 'MontserratSemiBold',
-    color: UIStyles.colors.black,
+    color: currentTheme === 'dark' ? UIStyles.dark.black : UIStyles.light.black,
 
 
 }));
@@ -229,13 +237,13 @@ const FilterSectionContainer = styled.View( () => ({
 
 
 
-const FilterSubmitWrapper = styled.View( () => ({
+const FilterSubmitWrapper = styled.View( ({currentTheme}) => ({
     margin: 'auto 0',
     marginBottom: 0,
     width: '100%',
-    background: 'white',
+    background: currentTheme === 'dark' ? UIStyles.dark.white : UIStyles.light.white,
     borderTopWidth: 1,
-    borderTopColor: UIStyles.colors.lightGrey,
+    borderTopColor: currentTheme === 'dark' ? UIStyles.dark.lightGrey : UIStyles.light.lightGrey,
     paddingLeft: 24,
     paddingRight: 24,
     paddingTop: 18,
@@ -250,16 +258,16 @@ const FilterSubmitArea = styled.SafeAreaView( () => ({
 
 }));
 
-const SubmitButton = styled(CustomPressable)( () => ({
-    background: UIStyles.colors.green,
+const SubmitButton = styled(CustomPressable)( ({currentTheme}) => ({
+    background: currentTheme === 'dark' ? UIStyles.dark.green : UIStyles.light.green,
     paddingTop: 21,
     paddingBottom: 21,
     borderRadius: 12,
 }));
 
-const SubmitButtonTitle = styled.Text( () => ({
+const SubmitButtonTitle = styled.Text( ({currentTheme}) => ({
     fontSize: 16,
-    color: UIStyles.colors.white,
+    color: currentTheme === 'dark' ? UIStyles.dark.dark : UIStyles.light.white,
     fontFamily: 'MontserratSemiBold',
     textAlign: 'center',
 }));

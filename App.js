@@ -7,9 +7,7 @@ import TabNavigator from "./src/navigation/TabNavigator";
 import Auth from './src/screens/Auth/Auth';
 import auth from "@react-native-firebase/auth";
 import PreAuth from "./src/screens/PreAuth/PreAuth";
-import {ThemeProvider} from './src/providers/ThemeProvider';
-import styled from "styled-components/native";
-import EventsStackNavigator from "./src/navigation/EventsStackNavigator";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
@@ -24,6 +22,7 @@ export default function App() {
   });
 
 
+ // AsyncStorage.clear();
 
 
 
@@ -63,25 +62,21 @@ export default function App() {
   }
 
   return (
-      <ThemeProvider>
         <SafeAreaProvider>
           {loggedStatus ? (
               <>
-                <TabNavigator/>
+                <TabNavigator />
 
-                <Button title="Sign Out" onPress={signOut}/>
+                {/*<Button title="Sign Out" onPress={signOut}/>*/}
               </>
           ) : (
-              <>
-                {!showAuth ? (
+              !showAuth ? (
                     <PreAuth onButtonPress={() => setShowAuth(true)}/>
                 ) : (
                     <Auth/>
-                )}
-              </>
+              )
           )}
         </SafeAreaProvider>
-      </ThemeProvider>
   );
 }
 
